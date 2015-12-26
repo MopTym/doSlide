@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="renderer" content="webkit">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <title>Slider (fade)</title>
+        <style>
+            body {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                font-family: Arial, Helvetica, sans-serif;
+                line-height: 1.5;
+                background-color: #eee;
+            }
+            .wrap {
+                position: relative;
+                width: 1000px;
+                max-width: 100%;
+                min-height: 100%;
+                margin: 0 auto;
+                padding: 1rem;
+                box-sizing: border-box;
+                background-color: #fff;
+            }
+            .slider {
+                position: relative;
+                width: 100%;
+                padding-top: 56.25%;
+                max-width: 100%;
+                margin: 0 auto;
+            }
+            .img {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+                width: 100%;
+            }
+            .container {
+                top: 0;
+            }
+            .container > * {
+                -webkit-transition: opacity 1s;
+                transition: opacity 1s;
+                opacity: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrap">
+            <div class="slider">
+                <div class="container">
+                    <div><img src="./images/1.jpg" class="img"></div>
+                    <div><img src="./images/2.jpg" class="img"></div>
+                    <div><img src="./images/3.jpg" class="img"></div>
+                </div>
+            </div>
+            <h1>Simple Slider (fade)</h1>
+            <p>Use mouse wheel / slide to switch images.</p>
+            <p>To get more details about the images, please read <a href="https://github.com/MopTym/doSlide/tree/master/demo/images">README.md</a>.</p>
+        </div>
+        <script type="text/javascript" src="../dist/do-slide.js"></script>
+        <script type="text/javascript">
+        
+            var timer = function(slide, interval, token) {
+                function next() {
+                    token = setTimeout(next, interval)
+                    if (!(document.hidden || document.webkitHidden)) {
+                        slide.next()
+                    }
+                }
+                return function() {
+                    clearTimeout(token)
+                    token = setTimeout(next, interval)
+                }
+            }
+            
+            var slide = new DoSlide('.container', {
+                silent: true,
+                duration: 1000,
+                horizontal: true,
+                infinite: true
+            }), slideTimer = timer(slide, 4000)
+            
+            slide.onBeforeChange(function(curIndex, tarIndex, cur, tar) {
+                this.$(cur).css('opacity', '0')
+                this.$(tar).css('opacity', '1')
+            }).do(function(curIndex, cur) {
+                this.$(cur).css('opacity', '1')
+            }).onChanged(slideTimer).do(slideTimer)
+
+        </script>
+    </body>
+</html>

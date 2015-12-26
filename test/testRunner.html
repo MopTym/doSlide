@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <title>DoSlide Tests</title>
+        <link rel="stylesheet" href="../node_modules/mocha/mocha.css"/>
+    </head>
+    <body>
+		<div class="container">
+			<div class="section-1"></div>
+			<div class="section-2">
+				<div class="sub-container">
+					<div class="sub-section-1"></div>
+					<div class="sub-section-2"></div>
+					<div class="sub-section-3"></div>
+				</div>
+			</div>
+			<div class="section-3"></div>
+			<div class="section-4"></div>
+		</div>
+        <script src="../node_modules/mocha/mocha.js"></script>
+        <script src="../node_modules/chai/chai.js"></script>
+        <script>
+            mocha.ui('bdd')
+            mocha.reporter('html')
+            var expect = chai.expect
+            var assert = chai.assert
+            var utils  = chai.utils
+            chai.should()
+        </script>
+        <script src="test.js"></script>
+        <script>
+            if (window.mochaPhantomJS) { mochaPhantomJS.run() }
+            else { mocha.run() }
+        </script>
+    </body>
+</html>
