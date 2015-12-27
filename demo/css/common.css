@@ -1,0 +1,25 @@
+.section:nth-child(1) { background-color: #FFBDBD; }
+.section:nth-child(2) { background-color: #FFDEAD; }
+.section:nth-child(3) { background-color: #C3EBFF; }
+.section:nth-child(4) { background-color: #F0B6FF; }
+
+.container {
+    counter-reset: section-counter;
+}
+
+.section:after {
+    content: counter(section-counter);
+    counter-increment: section-counter;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 1.5em;
+    height: 1.5em;
+    margin: -.75em 0 0 -.75em;
+    font-size: 5em;
+    text-align: center;
+    line-height: 1.5em;
+    color: #966;
+    border: .05em solid;
+    border-radius: 50%;
+}
