@@ -629,16 +629,16 @@ DoSlide假设所在项目已经拥有loading方案，如果没有又很在意的
 
 ```shell
 
-// 初始化项目
+# 初始化项目
 npm init
 
-// 开发
+# 开发
 npm run watch
 
-// 测试
+# 测试
 npm test
 
-// 构建
+# 构建
 npm run build
 
 ```

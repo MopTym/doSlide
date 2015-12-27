@@ -642,16 +642,16 @@ About initialization.
 
 ```shell
 
-// initialize
+# initialize
 npm init
 
-// develop
+# develop
 npm run watch
 
-// test
+# test
 npm test
 
-// build
+# build
 npm run build
 
 ```
