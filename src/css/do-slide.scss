@@ -1,0 +1,25 @@
+.do-slide-parent {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.do-slide-container {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.do-slide-section {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.do-slide-init > :not(:first-child) {
+    display: none;
+}

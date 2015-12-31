@@ -1,0 +1,25 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    letter-spacing: .08em;
+    color: #333;
+    @media (max-width: 1000px) {
+        font-size: .8em;
+    }
+    @media (max-width: 600px) {
+        font-size: .6em;
+    }
+}
+
+.ds-tb {
+    display: table;
+}
+
+.ds-tb-cell {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.github-link {
+    color: #333;
+}

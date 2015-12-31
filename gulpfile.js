@@ -64,7 +64,7 @@ function startupServer() {
 
 //////////////////////////////////////////////////////////////////////
 
-gulp.task('default', ['assets', 'css', 'js', 'html'])
+gulp.task('default', ['vendor', 'assets', 'css', 'js', 'html'])
 
 gulp.task('watch', ['default'], (done) => {
     gulp.watch('src/assets/**/*', ['assets'])
@@ -86,6 +86,11 @@ gulp.task('assets', () => {
         .pipe(gulp.dest('dist/assets'))
 })
 
+gulp.task('vendor', () => {
+    gulp.src('node_modules/octocat-icon-font/dist/fonts/*.*')
+        .pipe(gulp.dest('dist/css/fonts'))
+})
+
 gulp.task('html', () => {
     return gulp.src('src/index.jade')
         .pipe(jade({ pretty: true }))
@@ -93,7 +98,7 @@ gulp.task('html', () => {
 })
 
 gulp.task('css', () => {
-    return gulp.src('src/css/**/*.{sass,scss}')
+    return gulp.src('src/css/style.scss')
         .pipe(sourcemaps.init())
         .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
         .pipe(autoprefixer({
