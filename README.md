@@ -408,7 +408,7 @@ After switching, excute `callback` with current DoSlide object as context object
 #### onOverRange(callback(curIndex, tarIndex, cur))
 
 - `curIndex`: index of current section
-- `lastIndex`: index of target section
+- `tarIndex`: index of target section
 - `cur`: current section
 
 When try to switch to overrange section, excute `callback` with current DoSlide object as context object (`this`) .

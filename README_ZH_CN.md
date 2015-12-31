@@ -399,7 +399,7 @@ DoSlide本身属性：
 #### onOverRange(callback(curIndex, tarIndex, cur))
 
 - `curIndex`：当前section索引
-- `lastIndex`：目标section索引
+- `tarIndex`：目标section索引
 - `cur`：当前section
 
 在尝试越界切换时，以当前DoSlide对象作为上下文（`this`）执行`callback`。
