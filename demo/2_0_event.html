@@ -36,6 +36,13 @@
                     last, last,
                     this: this
                 })
+            }).onOverRange(function(curIndex, tarIndex, cur) {
+                console.log('onOverRange', {
+                    curIndex: curIndex, 
+                    tarIndex: tarIndex, 
+                    cur, cur,
+                    this: this
+                })
             }).onUserMouseWheel(function(direction) {
                 console.log('onUserMouseWheel', {
                     direction: direction,

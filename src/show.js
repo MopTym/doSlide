@@ -53,30 +53,37 @@ function setActiveClass(doSlide, index) {
 }
 
 function change(doSlide, index, isNext) {
-    if (canChange(doSlide, index) && excuteUserEventCallbacks(doSlide)) {
+    if (canChangeNow(doSlide, index)) {
         let lastIndex = doSlide.currentIndex
-        let isOK = excuteEventCallbacks(doSlide, {
-            name: 'onBeforeChange', 
-            args: [lastIndex, index, doSlide.currentSection, doSlide.el.children[index]] 
-        })
-        if (isOK) {
-            showSection(doSlide, index, isNext)
-            doSlide.currentIndex = index
-            doSlide.currentSection = doSlide.el.children[index]
-            excuteEventCallbacks(doSlide, { 
-                name: 'onChanged', 
-                args: [index, lastIndex, doSlide.currentSection, doSlide.el.children[lastIndex]] 
+        if (isOverRange(doSlide, index)) {
+            excuteEventCallbacks(doSlide, {
+                name: 'onOverRange', 
+                args: [lastIndex, index, doSlide.currentSection] 
             })
+        } else if (excuteUserEventCallbacks(doSlide)) {
+            let isOK = excuteEventCallbacks(doSlide, {
+                name: 'onBeforeChange', 
+                args: [lastIndex, index, doSlide.currentSection, doSlide.el.children[index]] 
+            })
+            if (isOK) {
+                showSection(doSlide, index, isNext)
+                doSlide.currentIndex = index
+                doSlide.currentSection = doSlide.el.children[index]
+                excuteEventCallbacks(doSlide, { 
+                    name: 'onChanged', 
+                    args: [index, lastIndex, doSlide.currentSection, doSlide.el.children[lastIndex]] 
+                })
+            }
         }
     }
 }
 
-function canChange(doSlide, index) {
-    return (
-        (!doSlide.isChanging && index != doSlide.currentIndex) 
-        &&
-        (index > -1 && index < doSlide.el.children.length)
-    )
+function canChangeNow(doSlide, index) {
+    return (!doSlide.isChanging && index != doSlide.currentIndex)
+}
+
+function isOverRange(doSlide, index) {
+    return (index < 0 || index >= doSlide.el.children.length)
 }
 
 function transform(doSlide, index, isNext, isImmediate) {

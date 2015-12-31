@@ -50,6 +50,7 @@ class DoSlide {
         this.callbacks = {
             onChanged: [],
             onBeforeChange: [],
+            onOverRange: [],
             onUserMouseWheel: [],
             onUserSlide: []
         }
@@ -110,6 +111,11 @@ class DoSlide {
     
     onBeforeChange(callback) {
         this.callbacks.onBeforeChange.push(callback)
+        return this
+    }
+    
+    onOverRange(callback) {
+        this.callbacks.onOverRange.push(callback)
         return this
     }
     

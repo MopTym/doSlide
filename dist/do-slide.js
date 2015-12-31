@@ -1,5 +1,5 @@
 /*!
- * DoSlide v0.1.2
+ * DoSlide v0.1.3
  * (c) 2015 MopTym <moptym@163.com>
  * Released under the MIT License.
  * Homepage - https://github.com/MopTym/doSlide
@@ -127,6 +127,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.callbacks = {
 	            onChanged: [],
 	            onBeforeChange: [],
+	            onOverRange: [],
 	            onUserMouseWheel: [],
 	            onUserSlide: []
 	        };
@@ -192,6 +193,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'onBeforeChange',
 	        value: function onBeforeChange(callback) {
 	            this.callbacks.onBeforeChange.push(callback);
+	            return this;
+	        }
+	    }, {
+	        key: 'onOverRange',
+	        value: function onOverRange(callback) {
+	            this.callbacks.onOverRange.push(callback);
 	            return this;
 	        }
 	    }, {
@@ -680,26 +687,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	function change(doSlide, index, isNext) {
-	    if (canChange(doSlide, index) && (0, _event.excuteUserEventCallbacks)(doSlide)) {
+	    if (canChangeNow(doSlide, index)) {
 	        var lastIndex = doSlide.currentIndex;
-	        var isOK = (0, _event.excuteEventCallbacks)(doSlide, {
-	            name: 'onBeforeChange',
-	            args: [lastIndex, index, doSlide.currentSection, doSlide.el.children[index]]
-	        });
-	        if (isOK) {
-	            showSection(doSlide, index, isNext);
-	            doSlide.currentIndex = index;
-	            doSlide.currentSection = doSlide.el.children[index];
+	        if (isOverRange(doSlide, index)) {
 	            (0, _event.excuteEventCallbacks)(doSlide, {
-	                name: 'onChanged',
-	                args: [index, lastIndex, doSlide.currentSection, doSlide.el.children[lastIndex]]
+	                name: 'onOverRange',
+	                args: [lastIndex, index, doSlide.currentSection]
 	            });
+	        } else if ((0, _event.excuteUserEventCallbacks)(doSlide)) {
+	            var isOK = (0, _event.excuteEventCallbacks)(doSlide, {
+	                name: 'onBeforeChange',
+	                args: [lastIndex, index, doSlide.currentSection, doSlide.el.children[index]]
+	            });
+	            if (isOK) {
+	                showSection(doSlide, index, isNext);
+	                doSlide.currentIndex = index;
+	                doSlide.currentSection = doSlide.el.children[index];
+	                (0, _event.excuteEventCallbacks)(doSlide, {
+	                    name: 'onChanged',
+	                    args: [index, lastIndex, doSlide.currentSection, doSlide.el.children[lastIndex]]
+	                });
+	            }
 	        }
 	    }
 	}
 
-	function canChange(doSlide, index) {
-	    return !doSlide.isChanging && index != doSlide.currentIndex && index > -1 && index < doSlide.el.children.length;
+	function canChangeNow(doSlide, index) {
+	    return !doSlide.isChanging && index != doSlide.currentIndex;
+	}
+
+	function isOverRange(doSlide, index) {
+	    return index < 0 || index >= doSlide.el.children.length;
 	}
 
 	function transform(doSlide, index, isNext, isImmediate) {

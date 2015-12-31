@@ -8,7 +8,7 @@
 
 整屏滚动 / 轮播 / 无依赖 / Gzip后小于5KB
 
--
+=
 
 [English Version](README.md)
 
@@ -29,7 +29,7 @@
 - [使用示例](#使用示例)
 - [开发贡献](#开发贡献)
 
--
+=
 
 ## 插件介绍
 
@@ -396,6 +396,14 @@ DoSlide本身属性：
 
 在切换发生后，以当前DoSlide对象作为上下文（`this`）执行`callback`。
 
+#### onOverRange(callback(curIndex, tarIndex, cur))
+
+- `curIndex`：当前section索引
+- `lastIndex`：目标section索引
+- `cur`：当前section
+
+在尝试越界切换时，以当前DoSlide对象作为上下文（`this`）执行`callback`。
+
 #### onUserMouseWheel(callback(direction))
 
 - `direction`：向下滚时`direction.down = true`，向上滚时`direction.up = true`
@@ -629,8 +637,8 @@ DoSlide假设所在项目已经拥有loading方案，如果没有又很在意的
 
 ```shell
 
-# 初始化项目
-npm init
+# 安装
+npm install
 
 # 开发
 npm run watch
