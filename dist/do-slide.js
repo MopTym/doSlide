@@ -1,6 +1,6 @@
 /*!
- * DoSlide v0.1.3
- * (c) 2015 MopTym <moptym@163.com>
+ * DoSlide v0.1.4
+ * (c) 2016 MopTym <moptym@163.com>
  * Released under the MIT License.
  * Homepage - https://github.com/MopTym/doSlide
  */
