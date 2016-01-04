@@ -1,6 +1,6 @@
 {
   "name": "do-slide",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Fullpage scroll/Section scroll/Slider. No dependency.",
   "main": "dist/do-slide.js",
   "scripts": {

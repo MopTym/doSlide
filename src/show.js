@@ -7,16 +7,16 @@ const supportedTransform = $.getSupportedCSS('transform')
 
 
 function initSections(doSlide, initIndex) {
-    $(doSlide.el.children).css(
-        supportedTransform? 
-        { [supportedTransform]: 'translate' + (doSlide.config.horizontal? 'X': 'Y') + '(100%)' }: 
+    $(doSlide.sections).css(
+        supportedTransform?
+        { [supportedTransform]: 'translate' + (doSlide.config.horizontal? 'X': 'Y') + '(100%)' }:
         { display: 'none' }
     )
     showSection(doSlide, initIndex, false, true)
 }
 
 function showSection(doSlide, index, isNext, isImmediate) {
-    let cur = doSlide.currentSection, tar = doSlide.el.children[index], config = doSlide.config
+    let cur = doSlide.currentSection, tar = doSlide.sections[index], config = doSlide.config
     let busyTime = (isImmediate? 0: 1) * (config.minInterval + (supportedTransition? config.duration: 0))
     doSlide.isChanging = true
     if (!doSlide.config.silent) {
@@ -43,7 +43,7 @@ function toggleTransitionClass(config, cur, tar, isAdd) {
 }
 
 function setActiveClass(doSlide, index) {
-    $(doSlide.el.children).each((section, i) => {
+    $(doSlide.sections).each((section, i) => {
         if (i === index) {
             $.addClass(section, doSlide.config.activeClass)
         } else {
@@ -57,21 +57,21 @@ function change(doSlide, index, isNext) {
         let lastIndex = doSlide.currentIndex
         if (isOverRange(doSlide, index)) {
             excuteEventCallbacks(doSlide, {
-                name: 'onOverRange', 
-                args: [lastIndex, index, doSlide.currentSection] 
+                name: 'onOverRange',
+                args: [lastIndex, index, doSlide.currentSection]
             })
         } else if (excuteUserEventCallbacks(doSlide)) {
             let isOK = excuteEventCallbacks(doSlide, {
-                name: 'onBeforeChange', 
-                args: [lastIndex, index, doSlide.currentSection, doSlide.el.children[index]] 
+                name: 'onBeforeChange',
+                args: [lastIndex, index, doSlide.currentSection, doSlide.sections[index]]
             })
             if (isOK) {
                 showSection(doSlide, index, isNext)
                 doSlide.currentIndex = index
-                doSlide.currentSection = doSlide.el.children[index]
-                excuteEventCallbacks(doSlide, { 
-                    name: 'onChanged', 
-                    args: [index, lastIndex, doSlide.currentSection, doSlide.el.children[lastIndex]] 
+                doSlide.currentSection = doSlide.sections[index]
+                excuteEventCallbacks(doSlide, {
+                    name: 'onChanged',
+                    args: [index, lastIndex, doSlide.currentSection, doSlide.sections[lastIndex]]
                 })
             }
         }
@@ -83,11 +83,11 @@ function canChangeNow(doSlide, index) {
 }
 
 function isOverRange(doSlide, index) {
-    return (index < 0 || index >= doSlide.el.children.length)
+    return (index < 0 || index >= doSlide.sections.length)
 }
 
 function transform(doSlide, index, isNext, isImmediate) {
-    let children = doSlide.el.children, maxIndex = children.length - 1, curIndex = doSlide.currentIndex
+    let children = doSlide.sections, maxIndex = children.length - 1, curIndex = doSlide.currentIndex
     let cur = doSlide.currentSection, tar = children[index], config = doSlide.config
     if (supportedTransform) {
         let isLoop = isInLoopBoundary(curIndex, index, maxIndex, isNext)

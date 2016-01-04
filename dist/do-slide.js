@@ -1,5 +1,5 @@
 /*!
- * DoSlide v0.1.4
+ * DoSlide v0.1.5
  * (c) 2016 MopTym <moptym@163.com>
  * Released under the MIT License.
  * Homepage - https://github.com/MopTym/doSlide
@@ -135,8 +135,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.isChanging = false;
 	        this.el = selector.nodeType ? selector : document.querySelector(selector);
 	        this.eventEl = null;
+	        this.sections = this.el.children;
 	        this.currentIndex = config.initIndex || 0;
-	        this.currentSection = this.el.children[this.currentIndex];
+	        this.currentSection = this.sections[this.currentIndex];
 	        this.config = _extends({}, DEFAULT_CONFIG, DEFAULT_INIT_CONFIG);
 	        this.set(config);
 	        (0, _init.init)(this);
@@ -602,7 +603,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _util2.default.insertBase64CSS(BASE64CSS, 'do-slide-css');
 	        _util2.default.addClass(doSlide.el.parentNode, doSlide.config.parentClass);
 	        _util2.default.addClass(doSlide.el, doSlide.config.containerClass);
-	        (0, _util2.default)(doSlide.el.children).addClass(doSlide.config.sectionClass);
+	        (0, _util2.default)(doSlide.sections).addClass(doSlide.config.sectionClass);
 	    }
 
 	    if (!doSlide.config.silent) {
@@ -643,13 +644,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	var supportedTransform = _util2.default.getSupportedCSS('transform');
 
 	function initSections(doSlide, initIndex) {
-	    (0, _util2.default)(doSlide.el.children).css(supportedTransform ? _defineProperty({}, supportedTransform, 'translate' + (doSlide.config.horizontal ? 'X' : 'Y') + '(100%)') : { display: 'none' });
+	    (0, _util2.default)(doSlide.sections).css(supportedTransform ? _defineProperty({}, supportedTransform, 'translate' + (doSlide.config.horizontal ? 'X' : 'Y') + '(100%)') : { display: 'none' });
 	    showSection(doSlide, initIndex, false, true);
 	}
 
 	function showSection(doSlide, index, isNext, isImmediate) {
 	    var cur = doSlide.currentSection,
-	        tar = doSlide.el.children[index],
+	        tar = doSlide.sections[index],
 	        config = doSlide.config;
 	    var busyTime = (isImmediate ? 0 : 1) * (config.minInterval + (supportedTransition ? config.duration : 0));
 	    doSlide.isChanging = true;
@@ -677,7 +678,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	function setActiveClass(doSlide, index) {
-	    (0, _util2.default)(doSlide.el.children).each(function (section, i) {
+	    (0, _util2.default)(doSlide.sections).each(function (section, i) {
 	        if (i === index) {
 	            _util2.default.addClass(section, doSlide.config.activeClass);
 	        } else {
@@ -697,15 +698,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else if ((0, _event.excuteUserEventCallbacks)(doSlide)) {
 	            var isOK = (0, _event.excuteEventCallbacks)(doSlide, {
 	                name: 'onBeforeChange',
-	                args: [lastIndex, index, doSlide.currentSection, doSlide.el.children[index]]
+	                args: [lastIndex, index, doSlide.currentSection, doSlide.sections[index]]
 	            });
 	            if (isOK) {
 	                showSection(doSlide, index, isNext);
 	                doSlide.currentIndex = index;
-	                doSlide.currentSection = doSlide.el.children[index];
+	                doSlide.currentSection = doSlide.sections[index];
 	                (0, _event.excuteEventCallbacks)(doSlide, {
 	                    name: 'onChanged',
-	                    args: [index, lastIndex, doSlide.currentSection, doSlide.el.children[lastIndex]]
+	                    args: [index, lastIndex, doSlide.currentSection, doSlide.sections[lastIndex]]
 	                });
 	            }
 	        }
@@ -717,11 +718,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	function isOverRange(doSlide, index) {
-	    return index < 0 || index >= doSlide.el.children.length;
+	    return index < 0 || index >= doSlide.sections.length;
 	}
 
 	function transform(doSlide, index, isNext, isImmediate) {
-	    var children = doSlide.el.children,
+	    var children = doSlide.sections,
 	        maxIndex = children.length - 1,
 	        curIndex = doSlide.currentIndex;
 	    var cur = doSlide.currentSection,

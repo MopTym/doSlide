@@ -37,26 +37,26 @@ DoSlide is a light, no dependency and low invasive JS plugin, providing a patter
 
 <br>
 
-Take a quick look at [introduction page](http://app.moptym.com/do-slide). 
+Take a quick look at [introduction page](http://app.moptym.com/do-slide).
 
 <br>
 
 
 ## Usage
 
-Download [dist](dist) folder or install it by using [npm](https://www.npmjs.com/): 
+Download [dist](dist) folder or install it by using [npm](https://www.npmjs.com/):
 ```shell
 npm install --save do-slide
 ```
 
 DoSlide is a [UMD](https://github.com/umdjs/umd) module, which can be used as a module in both CommonJS and AMD modular environments. When in non-modular environment, a variable named '`DoSlide`' will be exposed in outer scope.
 
-Include JS file: 
+Include JS file:
 ```html
 <script src="path/to/do-slide/dist/do-slide.min.js"></script>
 ```
 
-HTML structure: 
+HTML structure:
 ```html
 <div class="container">
     <div>Section 1</div>
@@ -65,7 +65,7 @@ HTML structure:
 </div>
 ```
 
-Then create a corresponding DoSlide object: 
+Then create a corresponding DoSlide object:
 ```js
 var slide = new DoSlide('.container', {/* configurations */})
 ```
@@ -79,9 +79,9 @@ There are several practices in [Examples](#examples) section.
 
 ## Behavior pattern
 
-By understanding how DoSlide works, you can use it better. In its default configuration, DoSlide acts as follows: 
+By understanding how DoSlide works, you can use it better. In its default configuration, DoSlide acts as follows:
 
-Assume there is a HTML structure: 
+Assume there is a HTML structure:
 ```html
 <html>
     <head>
@@ -113,7 +113,7 @@ to create a new DoSlide object. In this time, the object performs the following 
 
 The code about above process is in [init.js](src/init.js) . The default CSS is in [style.css](src/style.css) .
 
-Then the HTML will look like: 
+Then the HTML will look like:
 ```html
 <html>
     <head>
@@ -130,7 +130,7 @@ Then the HTML will look like:
 </html>
 ```
 
-When user mouse wheel or touch slide event is triggered, DoSlide will switch active section if it can. 
+When user mouse wheel or touch slide event is triggered, DoSlide will switch active section if it can.
 
 When switching start, DoSlide will add `transition-out` class to current section and add `transition-in` class to target section, then remove them both when switching complete.
 
@@ -139,7 +139,7 @@ When switching start, DoSlide will add `transition-out` class to current section
 
 ## Create object
 
-DoSlide provides two ways to create object: 
+DoSlide provides two ways to create object:
 - `new DoSlide([selector, config])`
 - `DoSlide.from(doSlideObj[, selector, config])`
 
@@ -152,26 +152,26 @@ There can be several DoSlide objects in a page, you can use `DoSlide.from()` to 
 
 ## Configuration
 
-In DoSlide's source code ([index.js](src/index.js)) , configurations look like this: 
+In DoSlide's source code ([index.js](src/index.js)) , configurations look like this:
 ```js
 const DEFAULT_INIT_CONFIG = {
     initIndex            : 0,
     initClass            : 'do-slide-init',
-    
+
     parentClass          : 'do-slide-parent',
     containerClass       : 'do-slide-container',
     sectionClass         : 'do-slide-section',
     customCSS            : false,
-    
+
     activeClass          : 'active',
     transitionInClass    : 'transition-in',
     transitionOutClass   : 'transition-out',
-    
+
     silent               : false,
-    
+
     horizontal           : false,
     infinite             : false,
-    
+
     listenUserMouseWheel : true,
     listenUserSlide      : true,
     eventElemSelector    : null
@@ -191,13 +191,13 @@ this.config = Object.assign({}, DEFAULT_CONFIG, DEFAULT_INIT_CONFIG)
 this.set(config)
 ```
 
-The default `config` is a combination of `DEFAULT_INIT_CONFIG` and `DEFAULT_CONFIG`. The `DEFAULT_INIT_CONFIG` only can be customized once at initialization time: 
+The default `config` is a combination of `DEFAULT_INIT_CONFIG` and `DEFAULT_CONFIG`. The `DEFAULT_INIT_CONFIG` only can be customized once at initialization time:
 ```js
 var slide = new DoSlide('.container', {
     horizontal: true    // customize DEFAULT_INIT_CONFIG
 })
 ```
-don't do this: 
+don't do this:
 ```js
 slide.set({
     horizontal: true    // don't o(>_<)o
@@ -205,7 +205,7 @@ slide.set({
 ```
 but you can customize `DEFAULT_CONFIG` in any time.
 
-A more detailed explanation of the configurations follows below: 
+A more detailed explanation of the configurations follows below:
 
 <table>
     <thead>
@@ -331,18 +331,19 @@ A more detailed explanation of the configurations follows below:
 
 ## Properties
 
-Properties of DoSlide object (instance): 
+Properties of DoSlide object (instance):
 
 | Name | Readonly | Description |
 | --- | :---: | --- |
 | el | yes | Corresponding element. |
 | eventEl | yes | Event element. |
+| sections | yes | collection of sections |
 | currentIndex | yes | Index of current section. |
 | currentSection | yes | Current section. |
 | isChanging | yes | Is switching sections now. |
 | $ | yes | Inner tool library. |
 
-Properties of DoSlide: 
+Properties of DoSlide:
 
 | Name | Readonly | Description |
 | --- | :---: | --- |
@@ -446,7 +447,7 @@ Example [2_0_event](http://htmlpreview.github.io/?https://github.com/MopTym/doSl
 
 You can access inner tool library through `DoSlide.$` or `$` property of DoSlide object.
 
-The library provides such functions like jQuery: 
+The library provides such functions like jQuery:
 
 #### on(type, listener[, useCapture = false])
 
@@ -571,10 +572,10 @@ Actually, in my mind, it's a switch pattern, by the way, providing some function
 
 #### How to apply CSS before DoSlide object initialization?
 
-DoSlide assumes the project already has a loading scheme, if doesn't, there are more than one solutions: 
+DoSlide assumes the project already has a loading scheme, if doesn't, there are more than one solutions:
 
 - Add default CSS ([style.css](src/style.css)) manually, or set `customCSS` to `true` to fully customize styles.
-- Use `initClass` (`do-slide-init`) . 
+- Use `initClass` (`do-slide-init`) .
 
 You can reference [3_3_init](http://htmlpreview.github.io/?https://github.com/MopTym/doSlide/blob/master/demo/3_3_init.html) ([source](demo/3_3_init.html)) .
 

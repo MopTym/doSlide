@@ -14,21 +14,21 @@ import { change } from './show'
 const DEFAULT_INIT_CONFIG = {
     initIndex            : 0,
     initClass            : 'do-slide-init',
-    
+
     parentClass          : 'do-slide-parent',
     containerClass       : 'do-slide-container',
     sectionClass         : 'do-slide-section',
     customCSS            : false,
-    
+
     activeClass          : 'active',
     transitionInClass    : 'transition-in',
     transitionOutClass   : 'transition-out',
-    
+
     silent               : false,
-    
+
     horizontal           : false,
     infinite             : false,
-    
+
     listenUserMouseWheel : true,
     listenUserSlide      : true,
     eventElemSelector    : null
@@ -44,7 +44,7 @@ const DEFAULT_CONFIG = {
 
 
 class DoSlide {
-    
+
     constructor(selector = document.createElement('div'), config = {}) {
         this.$ = $
         this.callbacks = {
@@ -58,13 +58,14 @@ class DoSlide {
         this.isChanging = false
         this.el = selector.nodeType? selector: document.querySelector(selector)
         this.eventEl = null
+        this.sections = this.el.children
         this.currentIndex = config.initIndex || 0
-        this.currentSection = this.el.children[this.currentIndex]
+        this.currentSection = this.sections[this.currentIndex]
         this.config = Object.assign({}, DEFAULT_CONFIG, DEFAULT_INIT_CONFIG)
         this.set(config)
         init(this)
     }
-    
+
     set(name, value) {
         if (typeof name === 'string') {
             this.config[name] = value
@@ -73,7 +74,7 @@ class DoSlide {
         }
         return this
     }
-    
+
     get(name) {
         return this.config[name]
     }
@@ -85,7 +86,7 @@ class DoSlide {
         this.go(index, true)
         return this
     }
-    
+
     prev() {
         let index = this.config.infinite?
                     ((this.currentIndex || this.el.children.length) - 1):
@@ -93,32 +94,32 @@ class DoSlide {
         this.go(index, false)
         return this
     }
-    
+
     go(index, isNext) {
         change(this, index, isNext)
         return this
     }
-    
+
     do(callback) {
         callback.call(this, this.currentIndex, this.currentSection)
         return this
     }
-    
+
     onChanged(callback) {
         this.callbacks.onChanged.push(callback)
         return this
     }
-    
+
     onBeforeChange(callback) {
         this.callbacks.onBeforeChange.push(callback)
         return this
     }
-    
+
     onOverRange(callback) {
         this.callbacks.onOverRange.push(callback)
         return this
     }
-    
+
     onUserMouseWheel(callback) {
         this.callbacks.onUserMouseWheel.push(callback)
         return this

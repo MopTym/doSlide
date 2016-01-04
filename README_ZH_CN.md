@@ -148,21 +148,21 @@ DoSlide提供两种对象创建方法：
 const DEFAULT_INIT_CONFIG = {
     initIndex            : 0,
     initClass            : 'do-slide-init',
-    
+
     parentClass          : 'do-slide-parent',
     containerClass       : 'do-slide-container',
     sectionClass         : 'do-slide-section',
     customCSS            : false,
-    
+
     activeClass          : 'active',
     transitionInClass    : 'transition-in',
     transitionOutClass   : 'transition-out',
-    
+
     silent               : false,
-    
+
     horizontal           : false,
     infinite             : false,
-    
+
     listenUserMouseWheel : true,
     listenUserSlide      : true,
     eventElemSelector    : null
@@ -328,6 +328,7 @@ DoSlide对象属性：
 | --- | :---: | --- |
 | el | 是 | 对应元素 |
 | eventEl | 是 | 事件元素 |
+| sections | 是 | section集合 |
 | currentIndex | 是 | 当前section索引 |
 | currentSection | 是 | 当前section |
 | isChanging | 是 | 当前时刻是否正在切换 |
