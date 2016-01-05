@@ -77,7 +77,7 @@ Then create a corresponding DoSlide object:
 var slide = new DoSlide('.ds-container', {/* configurations */})
 ```
 
-The CSS file content ([do-slide.css](dist/do-slide.css)) is very simple, you can copy it to your project CSS to prevent include the file alone (if don't take update into account) . Default `ds-parent` class doesn't set `position` property (not be positioned) , you can set it when you need.
+The CSS file content ([do-slide.css](dist/do-slide.css)) is very simple, you can copy it to your project CSS to prevent including the file alone (if don't take update into account) . Default `ds-parent` class doesn't set `position` property (not be positioned) , you can set it when you need.
 
 <br>
 
