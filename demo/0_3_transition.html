@@ -6,24 +6,35 @@
         <meta name="renderer" content="webkit">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
         <title>Transition</title>
+        <link rel="stylesheet" href="../dist/do-slide.min.css">
         <link rel="stylesheet" href="css/common.css">
     </head>
-    <body>
-        <div class="container">
-            <div class="section"></div>
-            <div class="section"></div>
-            <div class="section"></div>
-            <div class="section"></div>
+    <body class="ds-parent">
+        <div class="ds-container container">
+            <div class="section">
+                <span class="arrow down"></span>
+            </div>
+            <div class="section">
+                <span class="arrow down"></span>
+                <span class="arrow up"></span>
+            </div>
+            <div class="section">
+                <span class="arrow down"></span>
+                <span class="arrow up"></span>
+            </div>
+            <div class="section">
+                <span class="arrow up"></span>
+            </div>
         </div>
         <script type="text/javascript" src="../dist/do-slide.min.js"></script>
         <script type="text/javascript">
-        
+
             var slide = new DoSlide('.container', {
                 duration: 1200,
                 timingFunction: 'cubic-bezier(0.25, 0.01, 0.63, 1.7)',
                 minInterval: 20
             })
-            
+
         </script>
     </body>
 </html>

@@ -295,9 +295,9 @@
 	            return util.onMouseWheel(elem, callback, isStopPropFn);
 	        });
 	    },
-	    onSlide: function onSlide(callback, isStopPropFn) {
+	    onSwipe: function onSwipe(callback, isStopPropFn) {
 	        return this.each(function (elem) {
-	            return util.onSlide(elem, callback, isStopPropFn);
+	            return util.onSwipe(elem, callback, isStopPropFn);
 	        });
 	    }
 	});
@@ -377,21 +377,6 @@
 	});
 
 	_extends(util, {
-	    insertBase64CSS: function insertBase64CSS(base64Str, id) {
-	        var head = util('head')[0];
-	        var elem = util('link#' + id);
-	        if (!elem.length) {
-	            elem = util(document.createElement('link'));
-	            if (id) {
-	                elem.attr({ id: id });
-	            }
-	            head.insertBefore(elem[0], head.children[0]);
-	        }
-	        elem.attr({
-	            rel: 'stylesheet',
-	            href: 'data:text/css;base64,' + base64Str
-	        });
-	    },
 
 	    /**
 	     * get supported CSS property name
@@ -431,7 +416,7 @@
 	            callback.call(elem, direction);
 	        }, false);
 	    },
-	    onSlide: function onSlide(elem, callback) {
+	    onSwipe: function onSwipe(elem, callback) {
 	        var isStopPropFn = arguments.length <= 2 || arguments[2] === undefined ? function () {
 	            return false;
 	        } : arguments[2];

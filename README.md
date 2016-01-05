@@ -8,7 +8,7 @@
 
 Fullpage scroll / Section scroll / Slider / No denpendency / Gzipped size < 5KB
 
-=
+<br>
 
 [简体中文](README_ZH_CN.md)
 
@@ -29,15 +29,15 @@ Fullpage scroll / Section scroll / Slider / No denpendency / Gzipped size < 5KB
 - [Examples](#examples)
 - [Contributing](#contributing)
 
-=
+<br>
 
 ## Introduction
 
 DoSlide is a light, no dependency and low invasive JS plugin, providing a pattern which switch entire one section at a time. DoSlide can be flexibly configured and has a inner tool library like jQuery, you can implement specific requirements quickly by taking advantage of it.
 
-<br>
-
 Take a quick look at [introduction page](http://app.moptym.com/do-slide).
+
+Noted: In order to optimize performance (especially on mobile), the version 1.0.0 change the default switch (scroll) mechanism, meanwhile, the way of including CSS and other places have been changed, so it's not compatible with previous versions.
 
 <br>
 
@@ -51,6 +51,11 @@ npm install --save do-slide
 
 DoSlide is a [UMD](https://github.com/umdjs/umd) module, which can be used as a module in both CommonJS and AMD modular environments. When in non-modular environment, a variable named '`DoSlide`' will be exposed in outer scope.
 
+Include CSS file:
+```html
+<link rel="stylesheet" href="path/to/do-slide/dist/do-slide.min.css">
+```
+
 Include JS file:
 ```html
 <script src="path/to/do-slide/dist/do-slide.min.js"></script>
@@ -58,17 +63,21 @@ Include JS file:
 
 HTML structure:
 ```html
-<div class="container">
-    <div>Section 1</div>
-    <div>Section 2</div>
-    <div>Section 3</div>
+<div class="ds-parent">
+    <div class="ds-container">
+        <div>Section 1</div>
+        <div>Section 2</div>
+        <div>Section 3</div>
+    </div>
 </div>
 ```
 
 Then create a corresponding DoSlide object:
 ```js
-var slide = new DoSlide('.container', {/* configurations */})
+var slide = new DoSlide('.ds-container', {/* configurations */})
 ```
+
+The CSS file content ([do-slide.css](dist/do-slide.css)) is very simple, you can copy it to your project CSS to prevent include the file alone (if don't take update into account) . Default `ds-parent` class doesn't set `position` property (not be positioned) , you can set it when you need.
 
 <br>
 
@@ -87,29 +96,27 @@ Assume there is a HTML structure:
     <head>
         ......
     </head>
-    <body>
-        <div class="container do-slide-init">
+    <body class="ds-parent">
+        <div class="ds-container ds-init">
             <div class="section-1"></div>
             <div class="section-2"></div>
             <div class="section-3"></div>
         </div>
+        ......
     </body>
 </html>
 ```
+
 After page structure finishes loading, we execute
 ```js
-new DoSlide('.container')
+new DoSlide('.ds-container')
 ```
 to create a new DoSlide object. In this time, the object performs the following actions:
 
-- import default CSS by inserting `link` element
-- add `do-slide-parent` class to parent element
-- add `do-slide-container` class to corresponding element
-- add `do-slide-section` class to child elements
 - initialize child elements
 - activate (add `active` class) and display the first child element
 - start listen user mouse wheel and touch slide events
-- remove `do-slide-init` class from corresponding element
+- remove `ds-init` class from corresponding element
 
 The code about above process is in [init.js](src/init.js) . The default CSS is in [style.css](src/style.css) .
 
@@ -117,15 +124,15 @@ Then the HTML will look like:
 ```html
 <html>
     <head>
-        <link id="do-slide-css" rel="stylesheet" href="data:text/css;base64,...">
         ......
     </head>
-    <body class="do-slide-parent">
-        <div class="container do-slide-container">
-            <div class="section-1 do-slide-section active"></div>
-            <div class="section-2 do-slide-section"></div>
-            <div class="section-3 do-slide-section"></div>
-        </div>
+    <body class="ds-parent">
+        <div class="ds-container">
+            <div class="section-1 active"></div>
+            <div class="section-2"></div>
+            <div class="section-3"></div>
+        </div
+        ......
     </body>
 </html>
 ```
@@ -156,12 +163,7 @@ In DoSlide's source code ([index.js](src/index.js)) , configurations look like t
 ```js
 const DEFAULT_INIT_CONFIG = {
     initIndex            : 0,
-    initClass            : 'do-slide-init',
-
-    parentClass          : 'do-slide-parent',
-    containerClass       : 'do-slide-container',
-    sectionClass         : 'do-slide-section',
-    customCSS            : false,
+    initClass            : 'ds-init',
 
     activeClass          : 'active',
     transitionInClass    : 'transition-in',
@@ -173,7 +175,7 @@ const DEFAULT_INIT_CONFIG = {
     infinite             : false,
 
     listenUserMouseWheel : true,
-    listenUserSlide      : true,
+    listenUserSwipe      : true,
     eventElemSelector    : null
 }
 
@@ -182,6 +184,9 @@ const DEFAULT_CONFIG = {
     timingFunction       : 'ease',
     minInterval          : 50,
 
+    parent               : null,
+
+    respondToUserEvent   : true,
     stopPropagation      : false
 }
 ```
@@ -225,26 +230,6 @@ A more detailed explanation of the configurations follows below:
             <td>initClass</td>
             <td>do-slide-init</td>
             <td>Class to be removed after initialization.</td>
-        </tr>
-        <tr>
-            <td>parentClass</td>
-            <td>do-slide-parent</td>
-            <td>Class to be added to parent element.</td>
-        </tr>
-        <tr>
-            <td>containerClass</td>
-            <td>do-slide-container</td>
-            <td>Class to be added to corresponding element.</td>
-        </tr>
-        <tr>
-            <td>sectionClass</td>
-            <td>do-slide-section</td>
-            <td>Class to be added to child elements.</td>
-        </tr>
-        <tr>
-            <td>customCSS</td>
-            <td>false</td>
-            <td>If set to <code>true</code>, default CSS will not be inserted, and 3 classes above will not be added.</td>
         </tr>
         <tr>
             <td>activeClass</td>
@@ -319,12 +304,26 @@ A more detailed explanation of the configurations follows below:
             <td>The minimum time interval between switching.</td>
         </tr>
         <tr>
+            <td>parent</td>
+            <td>null</td>
+            <td>Parent DoSlide object.</td>
+        </tr>
+        <tr>
+            <td>respondToUserEvent</td>
+            <td>true</td>
+            <td>Defines whether to respond to user event or not.</td>
+        </tr>
+        <tr>
             <td>stopPropagation</td>
             <td>false</td>
             <td>Defines whether to stop event propagation or not.</td>
         </tr>
     </tbody>
 </table>
+
+注意：`parent`只是为了快捷实现嵌套的父子联动而设置的属性，你完全可以不使用`parent`而利用`onOverRange()`和`stopPropagation`来实现。
+
+Noted: `parent` just a shortcut that be used to implement linkage in nested structure quickly, you can totally implement the linkage by using `onOverRange()` and `stopPropagation` instead of using `parent`.
 
 <br>
 
@@ -420,17 +419,17 @@ When try to switch to overrange section, excute `callback` with current DoSlide 
 
 Before switching which caused by mouse wheel event occurs, excute `callback` with current DoSlide object as context object (`this`) .
 
-#### onUserSlide(callback(direction))
+#### onUserSwipe(callback(direction))
 
-- `direction`: its properties `up`, `down`, `left` and `right` represent slide direction
+- `direction`: its properties `up`, `down`, `left` and `right` represent swipe direction
 
-Before switching which caused by slide event occurs, excute `callback` with current DoSlide object as context object (`this`) .
+Before switching which caused by swipe event occurs, excute `callback` with current DoSlide object as context object (`this`) .
 
 <br>
 
 #### Trigger order
 
-1. `onUserMouseWheel` or `onUserSlide`
+1. `onUserMouseWheel` or `onUserSwipe`
 2. `onBeforeChange`
 3. `onChanged`
 
@@ -511,12 +510,12 @@ Get supported CSS property name. For example, the browser only supports `-webkit
 
 Listen user mouse wheel event, excute `callback` with `HTMLElement` as context object (`this`) when triggered.
 
-#### onSlide(HTMLElement, callback(direction)[, isStopPropFn() => false])
+#### onSwipe(HTMLElement, callback(direction)[, isStopPropFn() => false])
 
-- `direction`: its properties `up`, `down`, `left` and `right` represent slide direction
+- `direction`: its properties `up`, `down`, `left` and `right` represent swipe direction
 - `isStopPropFn`: a function return `true` or `false`, defines whether to stop event propagation or not
 
-Listen user touch slide event, excute `callback` with `HTMLElement` as context object (`this`) when triggered.
+Listen user touch swipe event, excute `callback` with `HTMLElement` as context object (`this`) when triggered.
 
 <br>
 
@@ -546,10 +545,9 @@ DoSlide.$.onMouseWheel(document.body, function(direction) {
 
 ## Low invasive
 
-The feature is mainly embodied in the following 3 aspects:
+The feature is mainly embodied in the following 2 aspects:
 
 - No monkey-patching. No more than one variable (`DoSlide`) may be exposed in outer scope.
-- In order to be overrided conveniently, default styles are imported by inserting `link` element.
 - You can take only what you need.
 
 <br>
@@ -559,7 +557,7 @@ The feature is mainly embodied in the following 3 aspects:
 
 DoSlide can run on all modern browsers which support ES5.
 
-If the browser dosen't support CSS `transform`, DoSlide will use `display` instead.
+If the browser dosen't support CSS `transform`, DoSlide will use `left` / `top` instead.
 
 <br>
 
@@ -569,15 +567,6 @@ If the browser dosen't support CSS `transform`, DoSlide will use `display` inste
 #### Waht is DoSlide, anyway?
 
 Actually, in my mind, it's a switch pattern, by the way, providing some functionalities. But no matter how I explain, it is (looks like) a plugin.
-
-#### How to apply CSS before DoSlide object initialization?
-
-DoSlide assumes the project already has a loading scheme, if doesn't, there are more than one solutions:
-
-- Add default CSS ([style.css](src/style.css)) manually, or set `customCSS` to `true` to fully customize styles.
-- Use `initClass` (`do-slide-init`) .
-
-You can reference [3_3_init](http://htmlpreview.github.io/?https://github.com/MopTym/doSlide/blob/master/demo/3_3_init.html) ([source](demo/3_3_init.html)) .
 
 #### How to customize the transition effect?
 
@@ -604,13 +593,13 @@ Infinite scrolling.
 
 About transition.
 
+#### [0_4_nested](http://htmlpreview.github.io/?https://github.com/MopTym/doSlide/blob/master/demo/0_4_nested.html) ([source](demo/0_4_nested.html))
+
+Nested structure.
+
 #### [1_0_set_class](http://htmlpreview.github.io/?https://github.com/MopTym/doSlide/blob/master/demo/1_0_set_class.html) ([source](demo/1_0_set_class.html))
 
 Configurate class name.
-
-#### [1_1_customize_css](http://htmlpreview.github.io/?https://github.com/MopTym/doSlide/blob/master/demo/1_1_customize_css.html) ([source](demo/1_1_customize_css.html))
-
-Customize CSS.
 
 #### [2_0_event](http://htmlpreview.github.io/?https://github.com/MopTym/doSlide/blob/master/demo/2_0_event.html) ([source](demo/2_0_event.html))
 
@@ -644,6 +633,8 @@ About initialization.
 
 
 ## Contributing
+
+Development is in the `dev` branch, please push new changes to `dev` branch.
 
 - **Development:** webpack + babel
 - **Test:** mocha-phantomjs + chai

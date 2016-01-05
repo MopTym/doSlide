@@ -6,6 +6,7 @@
         <meta name="renderer" content="webkit">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
         <title>Slider (fade)</title>
+        <link rel="stylesheet" href="../dist/do-slide.min.css">
         <style>
             body {
                 position: absolute;
@@ -47,6 +48,7 @@
                 top: 0;
             }
             .container > * {
+                position: absolute;
                 -webkit-transition: opacity 1s;
                 transition: opacity 1s;
                 opacity: 0;
@@ -56,7 +58,7 @@
     <body>
         <div class="wrap">
             <div class="slider">
-                <div class="container">
+                <div class="ds-container container">
                     <div><img src="./images/1.jpg" class="img"></div>
                     <div><img src="./images/2.jpg" class="img"></div>
                     <div><img src="./images/3.jpg" class="img"></div>
@@ -68,7 +70,7 @@
         </div>
         <script type="text/javascript" src="../dist/do-slide.min.js"></script>
         <script type="text/javascript">
-        
+
             var timer = function(slide, interval, token) {
                 function next() {
                     token = setTimeout(next, interval)
@@ -81,19 +83,18 @@
                     token = setTimeout(next, interval)
                 }
             }
-            
+
             var slide = new DoSlide('.container', {
                 silent: true,
                 duration: 1000,
-                horizontal: true,
                 infinite: true
             }), slideTimer = timer(slide, 4000)
-            
+
             slide.onBeforeChange(function(curIndex, tarIndex, cur, tar) {
                 this.$(cur).css('opacity', '0')
                 this.$(tar).css('opacity', '1')
             }).do(function(curIndex, cur) {
-                this.$(cur).css('opacity', '1')
+                this.$(cur).css('opacity', '1')    // init
             }).onChanged(slideTimer).do(slideTimer)
 
         </script>

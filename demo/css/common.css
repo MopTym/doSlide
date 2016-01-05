@@ -7,7 +7,7 @@
     counter-reset: section-counter;
 }
 
-.section:after {
+.section:before {
     content: counter(section-counter);
     counter-increment: section-counter;
     position: absolute;
@@ -22,4 +22,42 @@
     color: #966;
     border: .05em solid;
     border-radius: 50%;
+}
+
+.section.sub:before {
+    content: 'S' counter(section-counter);
+}
+
+.arrow:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    color: #f66;
+    border: 2em solid transparent;
+    opacity: .4;
+}
+.up:after {
+    top: 0;
+    left: 50%;
+    margin-left: -2em;
+    border-bottom-color: inherit;
+}
+.down:after {
+    bottom: 0;
+    left: 50%;
+    margin-left: -2em;
+    border-top-color: inherit;
+}
+.left:after {
+    left: 0;
+    top: 50%;
+    margin-top: -2em;
+    border-right-color: inherit;
+}
+.right:after {
+    right: 0;
+    top: 50%;
+    margin-top: -2em;
+    border-left-color: inherit;
 }

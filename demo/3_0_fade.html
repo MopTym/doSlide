@@ -6,17 +6,19 @@
         <meta name="renderer" content="webkit">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
         <title>Fade</title>
+        <link rel="stylesheet" href="../dist/do-slide.min.css">
         <link rel="stylesheet" href="css/common.css">
         <style>
             .container > * {
+                position: absolute;
                 -webkit-transition: opacity 1s;
                 transition: opacity 1s;
                 opacity: 0;
             }
         </style>
     </head>
-    <body>
-        <div class="container">
+    <body class="ds-parent">
+        <div class="ds-container container">
             <div class="section"></div>
             <div class="section"></div>
             <div class="section"></div>
@@ -24,19 +26,19 @@
         </div>
         <script type="text/javascript" src="../dist/do-slide.min.js"></script>
         <script type="text/javascript">
-        
+
             var slide = new DoSlide('.container', {
                 silent: true,
                 duration: 1000
             })
-            
+
             slide.onBeforeChange(function(curIndex, tarIndex, cur, tar) {
                 this.$(cur).css('opacity', '0')
                 this.$(tar).css('opacity', '1')
             }).do(function(curIndex, cur) {
                 this.$(cur).css('opacity', '1')  // init
             })
-            
+
         </script>
     </body>
 </html>

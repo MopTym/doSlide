@@ -28,68 +28,68 @@ util.prototype = {
         }
         return this
     }
-    
+
 }
 
 util.prototype.Init.prototype = util.prototype
 
 Object.assign(util.prototype, {
-    
+
     each(callback, isContext, isFalseBreak, breakValue) {
         return util.each(this, callback, isContext, isFalseBreak, breakValue)
     },
-    
+
     eq(index) {
         if (!isNaN(index)) {
             return util(this[index < 0? (this.length + index): index])
         }
         return util()
     },
-    
+
     on(type, listener, useCapture = false) {
         return this.each((elem) => util.on(elem, type, listener, useCapture))
     },
-    
+
     off(type, listener, useCapture = false) {
         return this.each((elem) => util.off(elem, type, listener, useCapture))
     },
-    
+
     attr(name, value) {
         return access(this, util.attr, name)
     },
-    
+
     css(name, value) {
         return access(this, util.css, name, value)
     },
-    
+
     removeAttr(name) {
         return this.each((elem) => util.removeAttr(elem, name))
     },
-    
+
     addClass(name) {
         return this.each((elem) => util.addClass(elem, name))
     },
-    
+
     removeClass(name) {
         return this.each((elem) => util.removeClass(elem, name))
     },
-    
+
     hasClass(name) {
         return !this.each((elem) => !util.hasClass(elem, name), false, true, false)
     },
-    
+
     onMouseWheel(callback, isStopPropFn) {
         return this.each((elem) => util.onMouseWheel(elem, callback, isStopPropFn))
     },
-    
-    onSlide(callback, isStopPropFn) {
-        return this.each((elem) => util.onSlide(elem, callback, isStopPropFn))
+
+    onSwipe(callback, isStopPropFn) {
+        return this.each((elem) => util.onSwipe(elem, callback, isStopPropFn))
     }
-    
+
 })
 
 Object.assign(util, {
-    
+
     each(elems, fn, isContext, isFalseBreak, breakValue) {
         if (isArrayLike(elems)) {
             for (let i = 0, len = elems.length, val; i < len; i++) {
@@ -105,11 +105,11 @@ Object.assign(util, {
     on(elem, type, listener, useCapture = false) {
         if (elem) elem.addEventListener(type, listener, useCapture)
     },
-    
+
     off(elem, type, listener, useCapture = false) {
         if (elem) elem.removeEventListener(type, listener, useCapture)
     },
-    
+
     attr(elem, name, value) {
         if (elem) {
             if (typeof name === 'string') {
@@ -125,7 +125,7 @@ Object.assign(util, {
             }
         }
     },
-    
+
     css(elem, name, value) {
         if (elem && name) {
             if (typeof name === 'string') {
@@ -141,11 +141,11 @@ Object.assign(util, {
             }
         }
     },
-    
+
     removeAttr(elem, name) {
         if (elem) elem.removeAttribute(name)
     },
-    
+
     addClass(elem, name) {
         if (elem && name && !this.hasClass(elem, name)) {
             let cur = this.attr(elem, 'class').trim()
@@ -153,7 +153,7 @@ Object.assign(util, {
             this.attr(elem, 'class', res)
         }
     },
-    
+
     removeClass(elem, name) {
         if (elem && name) {
             let reg = new RegExp('\\s*\\b' + name + '\\b\\s*', 'g')
@@ -165,27 +165,11 @@ Object.assign(util, {
     hasClass(elem, name) {
         return !!(elem && name) && (new RegExp('\\b' + name + '\\b')).test(this.attr(elem, 'class'))
     }
-    
+
 })
 
 Object.assign(util, {
 
-    insertBase64CSS(base64Str, id) {
-        let head = util('head')[0]
-        let elem = util('link#' + id)
-        if (!elem.length) {
-            elem = util(document.createElement('link'))
-            if (id) {
-                elem.attr({ id: id })
-            }
-            head.insertBefore(elem[0], head.children[0])
-        }
-        elem.attr({
-            rel: 'stylesheet',
-            href: 'data:text/css;base64,' + base64Str
-        })
-    },
-    
     /**
      * get supported CSS property name
      * example: if the browser only support '-webkit-transform', getSupportedCSS('transfrom') => '-webkit-transform'
@@ -219,7 +203,7 @@ Object.assign(util, {
         }, false)
     },
 
-    onSlide(elem, callback, isStopPropFn = () => false) {
+    onSwipe(elem, callback, isStopPropFn = () => false) {
         if (!elem || !callback) return
         let startX, startY, startTime, endX, endY
         elem.addEventListener('touchstart', (event) => {
@@ -259,9 +243,9 @@ Object.assign(util, {
     },
 
     forEach,
-    
+
     keys
-    
+
 })
 
 function isArrayLike(tar) {

@@ -13,12 +13,7 @@ import { change } from './show'
 
 const DEFAULT_INIT_CONFIG = {
     initIndex            : 0,
-    initClass            : 'do-slide-init',
-
-    parentClass          : 'do-slide-parent',
-    containerClass       : 'do-slide-container',
-    sectionClass         : 'do-slide-section',
-    customCSS            : false,
+    initClass            : 'ds-init',
 
     activeClass          : 'active',
     transitionInClass    : 'transition-in',
@@ -30,7 +25,7 @@ const DEFAULT_INIT_CONFIG = {
     infinite             : false,
 
     listenUserMouseWheel : true,
-    listenUserSlide      : true,
+    listenUserSwipe      : true,
     eventElemSelector    : null
 }
 
@@ -39,6 +34,9 @@ const DEFAULT_CONFIG = {
     timingFunction       : 'ease',
     minInterval          : 50,
 
+    parent               : null,
+
+    respondToUserEvent   : true,
     stopPropagation      : false
 }
 
@@ -52,7 +50,7 @@ class DoSlide {
             onBeforeChange: [],
             onOverRange: [],
             onUserMouseWheel: [],
-            onUserSlide: []
+            onUserSwipe: []
         }
         this.userEvent = null
         this.isChanging = false
@@ -67,10 +65,11 @@ class DoSlide {
     }
 
     set(name, value) {
+        let config = this.config
         if (typeof name === 'string') {
-            this.config[name] = value
+            config[name] = value
         } else {
-            Object.assign(this.config, name)
+            Object.assign(config, name)
         }
         return this
     }
@@ -83,7 +82,7 @@ class DoSlide {
         let index = this.config.infinite?
                     ((this.currentIndex + 1) % this.el.children.length):
                     (this.currentIndex + 1)
-        this.go(index, true)
+        this.go(index)
         return this
     }
 
@@ -91,12 +90,12 @@ class DoSlide {
         let index = this.config.infinite?
                     ((this.currentIndex || this.el.children.length) - 1):
                     (this.currentIndex - 1)
-        this.go(index, false)
+        this.go(index)
         return this
     }
 
-    go(index, isNext) {
-        change(this, index, isNext)
+    go(index) {
+        change(this, index)
         return this
     }
 
@@ -125,8 +124,8 @@ class DoSlide {
         return this
     }
 
-    onUserSlide(callback) {
-        this.callbacks.onUserSlide.push(callback)
+    onUserSwipe(callback) {
+        this.callbacks.onUserSwipe.push(callback)
         return this
     }
 

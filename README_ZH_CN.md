@@ -37,6 +37,8 @@ DoSlide是个轻巧、无依赖、低侵入性的JS插件，提供一次切换�
 
 若需快速了解此插件，请访问[介绍页面](http://app.moptym.com/do-slide)。
 
+注意：版本1.0.0为了优化（特别是移动端）而改变了默认的切换机制，并且CSS的引入方式以及其它一些地方都做了较大的改变，所以代码与1.0.0之前的版本不兼容。
+
 <br>
 
 
@@ -48,24 +50,35 @@ npm install --save do-slide
 ```
 DoSlide符合[UMD](https://github.com/umdjs/umd)模块规范，可以在CommonJS及AMD模块化环境中使用，在非模块化环境中时，会暴露出`DoSlide`变量。
 
-引入JS文件即可，不需要引入CSS：
+引入CSS：
+```html
+<link rel="stylesheet" href="path/to/do-slide/dist/do-slide.min.css">
+```
+
+引入JS：
 ```html
 <script src="path/to/do-slide/dist/do-slide.min.js"></script>
 ```
 
 HTML结构：
 ```html
-<div class="container">
-    <div>Section 1</div>
-    <div>Section 2</div>
-    <div>Section 3</div>
+<div class="ds-parent">
+    <div class="ds-container">
+        <div>Section 1</div>
+        <div>Section 2</div>
+        <div>Section 3</div>
+    </div>
 </div>
 ```
 
 之后创建对应的DoSlide对象即可：
 ```js
-var slide = new DoSlide('.container', {/* 配置选项 */})
+var slide = new DoSlide('.ds-container', {/* 配置选项 */})
 ```
+
+所引入的CSS文件内容（[do-slide.css](dist/do-slide.css)）非常简单，你完全可以将其拷贝到项目CSS中而不需要再单独引入这个文件（如果不顾略升级的话）。默认`ds-parent`类并不设置`position`属性，如有需要请自行设置。
+
+<br>
 
 具体的使用可以参考[使用示例](#使用示例)。
 
@@ -82,29 +95,26 @@ var slide = new DoSlide('.container', {/* 配置选项 */})
     <head>
         ......
     </head>
-    <body>
-        <div class="container do-slide-init">
+    <body class="ds-parent">
+        <div class="ds-container ds-init">
             <div class="section-1"></div>
             <div class="section-2"></div>
             <div class="section-3"></div>
         </div>
+        ......
     </body>
 </html>
 ```
 
 页面结构加载完成后，通过
 ```js
-new DoSlide('.container')
+new DoSlide('.ds-container')
 ```
 一个DoSlide对象被创建，这时DoSlide会执行以下操作：
-- 通过插入`link`元素来引入所需默认CSS
-- 给对应元素的父元素添加`do-slide-parent`类
-- 给对应元素添加`do-slide-container`类
-- 给对应元素的子元素添加`do-slide-section`类
 - 初始化所有子元素
 - 激活（添加`active`类）并显示第1个子元素
 - 开始监听滚轮及触屏滑动事件
-- 移除对应元素的`do-slide-init`类
+- 移除对应元素的`ds-init`类
 
 这些操作流程的代码在[init.js](src/init.js)中，你可以查看以深入了解。
 
@@ -112,15 +122,15 @@ new DoSlide('.container')
 ```html
 <html>
     <head>
-        <link id="do-slide-css" rel="stylesheet" href="data:text/css;base64,...">
         ......
     </head>
-    <body class="do-slide-parent">
-        <div class="container do-slide-container">
-            <div class="section-1 do-slide-section active"></div>
-            <div class="section-2 do-slide-section"></div>
-            <div class="section-3 do-slide-section"></div>
-        </div>
+    <body class="ds-parent">
+        <div class="ds-container">
+            <div class="section-1 active"></div>
+            <div class="section-2"></div>
+            <div class="section-3"></div>
+        </div
+        ......
     </body>
 </html>
 ```
@@ -147,12 +157,7 @@ DoSlide提供两种对象创建方法：
 ```js
 const DEFAULT_INIT_CONFIG = {
     initIndex            : 0,
-    initClass            : 'do-slide-init',
-
-    parentClass          : 'do-slide-parent',
-    containerClass       : 'do-slide-container',
-    sectionClass         : 'do-slide-section',
-    customCSS            : false,
+    initClass            : 'ds-init',
 
     activeClass          : 'active',
     transitionInClass    : 'transition-in',
@@ -164,7 +169,7 @@ const DEFAULT_INIT_CONFIG = {
     infinite             : false,
 
     listenUserMouseWheel : true,
-    listenUserSlide      : true,
+    listenUserSwipe      : true,
     eventElemSelector    : null
 }
 
@@ -173,6 +178,9 @@ const DEFAULT_CONFIG = {
     timingFunction       : 'ease',
     minInterval          : 50,
 
+    parent               : null,
+
+    respondToUserEvent   : true,
     stopPropagation      : false
 }
 ```
@@ -216,26 +224,6 @@ slide.set({
             <td>initClass</td>
             <td>do-slide-init</td>
             <td>初始化后要删除的对应元素的类</td>
-        </tr>
-        <tr>
-            <td>parentClass</td>
-            <td>do-slide-parent</td>
-            <td>给父元素添加的类</td>
-        </tr>
-        <tr>
-            <td>containerClass</td>
-            <td>do-slide-container</td>
-            <td>给对应元素添加的类</td>
-        </tr>
-        <tr>
-            <td>sectionClass</td>
-            <td>do-slide-section</td>
-            <td>给子元素添加的类</td>
-        </tr>
-        <tr>
-            <td>customCSS</td>
-            <td>false</td>
-            <td>设为 true 则不会插入CSS，不会添加以上3个类</td>
         </tr>
         <tr>
             <td>activeClass</td>
@@ -310,12 +298,24 @@ slide.set({
             <td>两次切换的最小时间间隔（毫秒）</td>
         </tr>
         <tr>
+            <td>parent</td>
+            <td>null</td>
+            <td>父级DoSlide对象</td>
+        </tr>
+        <tr>
+            <td>respondToUserEvent</td>
+            <td>true</td>
+            <td>是否响应用户事件</td>
+        </tr>
+        <tr>
             <td>stopPropagation</td>
             <td>false</td>
             <td>是否停止事件冒泡</td>
         </tr>
     </tbody>
 </table>
+
+注意：`parent`只是为了快捷实现嵌套的父子联动而设置的属性，你完全可以不使用`parent`而利用`onOverRange()`和`stopPropagation`来实现。
 
 <br>
 
@@ -411,7 +411,7 @@ DoSlide本身属性：
 
 在由用户鼠标滚轮事件触发的切换发生前，以当前DoSlide对象作为上下文（`this`）执行`callback`。
 
-#### onUserSlide(callback(direction))
+#### onUserSwipe(callback(direction))
 
 - `direction`：方向对象，其属性`up`、`down`、`left`、`right`代表滑动方向
 
@@ -421,7 +421,7 @@ DoSlide本身属性：
 
 #### 触发顺序
 
-1. `onUserMouseWheel` 或 `onUserSlide`
+1. `onUserMouseWheel` 或 `onUserSwipe`
 2. `onBeforeChange`
 3. `onChanged`
 
@@ -502,7 +502,7 @@ DoSlide内置了一个类似于jQuery的工具库，可以通过`DoSlide.$`或Do
 
 监听`HTMLElement`对象上的鼠标滚动，触发时以当前`HTMLElement`对象作为上下文（`this`）执行`callback`。
 
-#### onSlide(HTMLElement, callback(direction)[, isStopPropFn() => false])
+#### onSwipe(HTMLElement, callback(direction)[, isStopPropFn() => false])
 
 - `direction`：方向对象，其属性`up`、`down`、`left`、`right`对应滑动方向
 - `isStopPropFn`：返回`true`或`false`，是否阻止事件冒泡
@@ -535,9 +535,8 @@ DoSlide.$.onMouseWheel(document.body, function(direction) {
 
 ## 低侵入性
 
-DoSlide具有低侵入性，主要体现在以下3个方面：
+DoSlide具有低侵入性，主要体现在以下2个方面：
 - 没有任何原型对象扩展，在外作用域至多暴露一个`DoSlide`变量
-- 默认CSS通过`link`元素引入或不引入，尽可能降低优先级以便于覆盖
 - 在功能上可以只取所需，你可以得到一个完全不影响HTML，纯粹逻辑上的DoSlide对象，极端地说，你可以配置一个DoSlide对象让它什么都不影响什么都不做。
 
 <br>
@@ -547,7 +546,7 @@ DoSlide具有低侵入性，主要体现在以下3个方面：
 
 DoSlide可以运行在所有支持ES5的现代浏览器上。
 
-当浏览器不支持CSS的`transform`时，会使用`display`来代替，同时取消过渡效果。
+当浏览器不支持CSS的`transform`时，会使用`left`/`top`来代替，同时取消过渡效果。
 
 <br>
 
@@ -557,14 +556,6 @@ DoSlide可以运行在所有支持ES5的现代浏览器上。
 #### DoSlide到底是什么？
 
 一种模式，顺便提供了一些功能，不过怎么看都是个插件。
-
-#### 在DoSlide对象创建前没有应用上CSS样式页面混乱怎么办？
-
-DoSlide假设所在项目已经拥有loading方案，如果没有又很在意的话解决方法也不止一种：
-- 手动引入CSS。DoSlide引入的CSS在[style.css](src/style.css)里，你可以将其拷到项目的CSS中，然后给HTML结构加上对应的类。或完全自定义CSS，将`customCSS`设为`true`，不使用默认CSS。
-- 灵活使用`initClass`（`do-slide-init`）。
-
-可以参考 [3_3_init](http://htmlpreview.github.io/?https://github.com/MopTym/doSlide/blob/master/demo/3_3_init.html) ([source](demo/3_3_init.html))。
 
 #### 如何自定义过渡效果？
 
@@ -591,13 +582,13 @@ DoSlide假设所在项目已经拥有loading方案，如果没有又很在意的
 
 过渡相关。
 
+#### [0_4_nested](http://htmlpreview.github.io/?https://github.com/MopTym/doSlide/blob/master/demo/0_4_nested.html) ([source](demo/0_4_nested.html))
+
+嵌套。
+
 #### [1_0_set_class](http://htmlpreview.github.io/?https://github.com/MopTym/doSlide/blob/master/demo/1_0_set_class.html) ([source](demo/1_0_set_class.html))
 
 设置自动添加的class。
-
-#### [1_1_customize_css](http://htmlpreview.github.io/?https://github.com/MopTym/doSlide/blob/master/demo/1_1_customize_css.html) ([source](demo/1_1_customize_css.html))
-
-自定义CSS。
 
 #### [2_0_event](http://htmlpreview.github.io/?https://github.com/MopTym/doSlide/blob/master/demo/2_0_event.html) ([source](demo/2_0_event.html))
 
@@ -631,6 +622,8 @@ DoSlide假设所在项目已经拥有loading方案，如果没有又很在意的
 
 
 ## 开发贡献
+
+开发在`dev`分支进行，请将代码提交至`dev`分支。
 
 - 开发：webpack + babel
 - 测试：mocha-phantomjs + chai

@@ -1,5 +1,5 @@
 /*!
- * DoSlide v0.1.5
+ * DoSlide v1.0.0
  * (c) 2016 MopTym <moptym@163.com>
  * Released under the MIT License.
  * Homepage - https://github.com/MopTym/doSlide
@@ -87,12 +87,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var DEFAULT_INIT_CONFIG = {
 	    initIndex: 0,
-	    initClass: 'do-slide-init',
-
-	    parentClass: 'do-slide-parent',
-	    containerClass: 'do-slide-container',
-	    sectionClass: 'do-slide-section',
-	    customCSS: false,
+	    initClass: 'ds-init',
 
 	    activeClass: 'active',
 	    transitionInClass: 'transition-in',
@@ -104,7 +99,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    infinite: false,
 
 	    listenUserMouseWheel: true,
-	    listenUserSlide: true,
+	    listenUserSwipe: true,
 	    eventElemSelector: null
 	};
 
@@ -113,6 +108,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    timingFunction: 'ease',
 	    minInterval: 50,
 
+	    parent: null,
+
+	    respondToUserEvent: true,
 	    stopPropagation: false
 	};
 
@@ -129,7 +127,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            onBeforeChange: [],
 	            onOverRange: [],
 	            onUserMouseWheel: [],
-	            onUserSlide: []
+	            onUserSwipe: []
 	        };
 	        this.userEvent = null;
 	        this.isChanging = false;
@@ -146,10 +144,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _createClass(DoSlide, [{
 	        key: 'set',
 	        value: function set(name, value) {
+	            var config = this.config;
 	            if (typeof name === 'string') {
-	                this.config[name] = value;
+	                config[name] = value;
 	            } else {
-	                _extends(this.config, name);
+	                _extends(config, name);
 	            }
 	            return this;
 	        }
@@ -162,20 +161,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: 'next',
 	        value: function next() {
 	            var index = this.config.infinite ? (this.currentIndex + 1) % this.el.children.length : this.currentIndex + 1;
-	            this.go(index, true);
+	            this.go(index);
 	            return this;
 	        }
 	    }, {
 	        key: 'prev',
 	        value: function prev() {
 	            var index = this.config.infinite ? (this.currentIndex || this.el.children.length) - 1 : this.currentIndex - 1;
-	            this.go(index, false);
+	            this.go(index);
 	            return this;
 	        }
 	    }, {
 	        key: 'go',
-	        value: function go(index, isNext) {
-	            (0, _show.change)(this, index, isNext);
+	        value: function go(index) {
+	            (0, _show.change)(this, index);
 	            return this;
 	        }
 	    }, {
@@ -209,9 +208,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return this;
 	        }
 	    }, {
-	        key: 'onUserSlide',
-	        value: function onUserSlide(callback) {
-	            this.callbacks.onUserSlide.push(callback);
+	        key: 'onUserSwipe',
+	        value: function onUserSwipe(callback) {
+	            this.callbacks.onUserSwipe.push(callback);
 	            return this;
 	        }
 	    }]);
@@ -344,9 +343,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return util.onMouseWheel(elem, callback, isStopPropFn);
 	        });
 	    },
-	    onSlide: function onSlide(callback, isStopPropFn) {
+	    onSwipe: function onSwipe(callback, isStopPropFn) {
 	        return this.each(function (elem) {
-	            return util.onSlide(elem, callback, isStopPropFn);
+	            return util.onSwipe(elem, callback, isStopPropFn);
 	        });
 	    }
 	});
@@ -426,21 +425,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 	_extends(util, {
-	    insertBase64CSS: function insertBase64CSS(base64Str, id) {
-	        var head = util('head')[0];
-	        var elem = util('link#' + id);
-	        if (!elem.length) {
-	            elem = util(document.createElement('link'));
-	            if (id) {
-	                elem.attr({ id: id });
-	            }
-	            head.insertBefore(elem[0], head.children[0]);
-	        }
-	        elem.attr({
-	            rel: 'stylesheet',
-	            href: 'data:text/css;base64,' + base64Str
-	        });
-	    },
 
 	    /**
 	     * get supported CSS property name
@@ -480,7 +464,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            callback.call(elem, direction);
 	        }, false);
 	    },
-	    onSlide: function onSlide(elem, callback) {
+	    onSwipe: function onSwipe(elem, callback) {
 	        var isStopPropFn = arguments.length <= 2 || arguments[2] === undefined ? function () {
 	            return false;
 	        } : arguments[2];
@@ -596,16 +580,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var BASE64CSS = __webpack_require__(5);
-
 	function init(doSlide) {
-	    if (!doSlide.config.customCSS) {
-	        _util2.default.insertBase64CSS(BASE64CSS, 'do-slide-css');
-	        _util2.default.addClass(doSlide.el.parentNode, doSlide.config.parentClass);
-	        _util2.default.addClass(doSlide.el, doSlide.config.containerClass);
-	        (0, _util2.default)(doSlide.sections).addClass(doSlide.config.sectionClass);
-	    }
-
 	    if (!doSlide.config.silent) {
 	        (0, _show.initSections)(doSlide, doSlide.config.initIndex || 0);
 	    }
@@ -644,27 +619,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	var supportedTransform = _util2.default.getSupportedCSS('transform');
 
 	function initSections(doSlide, initIndex) {
-	    (0, _util2.default)(doSlide.sections).css(supportedTransform ? _defineProperty({}, supportedTransform, 'translate' + (doSlide.config.horizontal ? 'X' : 'Y') + '(100%)') : { display: 'none' });
-	    showSection(doSlide, initIndex, false, true);
+	    var $container = (0, _util2.default)(doSlide.el);
+	    var $sections = (0, _util2.default)(doSlide.sections);
+	    if (doSlide.config.horizontal) {
+	        $container.css('width', $sections.length + '00%');
+	        $sections.css({
+	            width: 100 / $sections.length + '%',
+	            float: 'left'
+	        });
+	    } else {
+	        $container.css('height', $sections.length + '00%');
+	        $sections.css('height', 100 / $sections.length + '%');
+	    }
+	    showSection(doSlide, initIndex, true);
 	}
 
-	function showSection(doSlide, index, isNext, isImmediate) {
+	function showSection(doSlide, index, isImmediate) {
 	    var cur = doSlide.currentSection,
 	        tar = doSlide.sections[index],
 	        config = doSlide.config;
-	    var busyTime = (isImmediate ? 0 : 1) * (config.minInterval + (supportedTransition ? config.duration : 0));
+	    var busyTime = config.minInterval + (supportedTransition ? config.duration : 0);
 	    doSlide.isChanging = true;
 	    if (!doSlide.config.silent) {
 	        setActiveClass(doSlide, index);
 	        toggleTransitionClass(config, cur, tar, true);
-	        transform(doSlide, index, isNext, isImmediate);
+	        transform(doSlide, index, isImmediate);
 	    }
 	    setTimeout(function () {
-	        if (!doSlide.config.silent) {
+	        if (!config.silent) {
 	            toggleTransitionClass(config, cur, tar, false);
 	        }
 	        doSlide.isChanging = false;
-	    }, busyTime);
+	    }, isImmediate ? 0 : busyTime);
+	    return busyTime;
 	}
 
 	function toggleTransitionClass(config, cur, tar, isAdd) {
@@ -687,28 +674,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	}
 
-	function change(doSlide, index, isNext) {
+	function change(doSlide, index) {
 	    if (canChangeNow(doSlide, index)) {
-	        var lastIndex = doSlide.currentIndex;
 	        if (isOverRange(doSlide, index)) {
-	            (0, _event.excuteEventCallbacks)(doSlide, {
-	                name: 'onOverRange',
-	                args: [lastIndex, index, doSlide.currentSection]
-	            });
+	            doingOnOverRange(doSlide, index);
 	        } else if ((0, _event.excuteUserEventCallbacks)(doSlide)) {
-	            var isOK = (0, _event.excuteEventCallbacks)(doSlide, {
-	                name: 'onBeforeChange',
-	                args: [lastIndex, index, doSlide.currentSection, doSlide.sections[index]]
-	            });
-	            if (isOK) {
-	                showSection(doSlide, index, isNext);
-	                doSlide.currentIndex = index;
-	                doSlide.currentSection = doSlide.sections[index];
-	                (0, _event.excuteEventCallbacks)(doSlide, {
-	                    name: 'onChanged',
-	                    args: [index, lastIndex, doSlide.currentSection, doSlide.sections[lastIndex]]
+	            (function () {
+	                var lastIndex = doSlide.currentIndex;
+	                var isOK = (0, _event.excuteEventCallbacks)(doSlide, {
+	                    name: 'onBeforeChange',
+	                    args: [lastIndex, index, doSlide.currentSection, doSlide.sections[index]]
 	                });
-	            }
+	                if (isOK) {
+	                    var busyTime = showSection(doSlide, index);
+	                    doSlide.currentIndex = index;
+	                    doSlide.currentSection = doSlide.sections[index];
+	                    setTimeout(function () {
+	                        (0, _event.excuteEventCallbacks)(doSlide, {
+	                            name: 'onChanged',
+	                            args: [index, lastIndex, doSlide.currentSection, doSlide.sections[lastIndex]]
+	                        });
+	                    }, busyTime);
+	                }
+	            })();
 	        }
 	    }
 	}
@@ -721,34 +709,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return index < 0 || index >= doSlide.sections.length;
 	}
 
-	function transform(doSlide, index, isNext, isImmediate) {
-	    var children = doSlide.sections,
-	        maxIndex = children.length - 1,
-	        curIndex = doSlide.currentIndex;
-	    var cur = doSlide.currentSection,
-	        tar = children[index],
-	        config = doSlide.config;
-	    if (supportedTransform) {
-	        var _$$css, _$$css2, _$$css3;
-
-	        var isLoop = isInLoopBoundary(curIndex, index, maxIndex, isNext);
-	        var direction = config.horizontal ? 'X' : 'Y';
-	        var translate = (isLoop ? -1 : 1) * (index > curIndex ? 100 : -100);
-	        var transition = supportedTransform + ' ' + (config.timingFunction || '') + ' ' + config.duration + 'ms';
-	        var transitionClean = supportedTransform + ' 0ms';
-	        transition = isImmediate ? transitionClean : transition;
-	        _util2.default.css(tar, (_$$css = {}, _defineProperty(_$$css, supportedTransition, transitionClean), _defineProperty(_$$css, supportedTransform, 'translate' + direction + '(' + translate + '%)'), _$$css));
-	        tar && tar.clientWidth; // read a property for triggering page reflow
-	        _util2.default.css(cur, (_$$css2 = {}, _defineProperty(_$$css2, supportedTransition, transition), _defineProperty(_$$css2, supportedTransform, 'translate' + direction + '(' + -translate + '%)'), _$$css2));
-	        _util2.default.css(tar, (_$$css3 = {}, _defineProperty(_$$css3, supportedTransition, transition), _defineProperty(_$$css3, supportedTransform, 'translate' + direction + '(0)'), _$$css3));
-	    } else {
-	        _util2.default.css(cur, { display: 'none' });
-	        _util2.default.css(tar, { display: 'block' });
+	function doingOnOverRange(doSlide, index) {
+	    var parent = doSlide.config.parent;
+	    var isOK = (0, _event.excuteEventCallbacks)(doSlide, {
+	        name: 'onOverRange',
+	        args: [doSlide.currentIndex, index, doSlide.currentSection]
+	    });
+	    if (isOK && parent) {
+	        if (index < 0) {
+	            parent.prev();
+	        } else {
+	            parent.next();
+	        }
 	    }
 	}
 
-	function isInLoopBoundary(curIndex, tarIndex, maxIndex, isNext) {
-	    return curIndex === 0 && tarIndex === maxIndex && !isNext || curIndex === maxIndex && tarIndex === 0 && isNext;
+	function transform(doSlide, index, isImmediate) {
+	    var config = doSlide.config;
+	    if (supportedTransform) {
+	        var _$$css;
+
+	        var direction = config.horizontal ? 'X' : 'Y';
+	        var _offset = -index * 100 / doSlide.sections.length + '%';
+	        var transition = supportedTransform + ' ' + (config.timingFunction || '') + ' ' + config.duration + 'ms';
+	        var transitionClean = supportedTransform + ' 0ms';
+	        _util2.default.css(doSlide.el, (_$$css = {}, _defineProperty(_$$css, supportedTransition, isImmediate ? transitionClean : transition), _defineProperty(_$$css, supportedTransform, 'translate' + direction + '(' + _offset + ')'), _$$css));
+	    } else {
+	        _util2.default.css(doSlide.el, config.horizontal ? 'top' : 'left', offset);
+	    }
 	}
 
 	exports.initSections = initSections;
@@ -795,23 +783,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	function startListen(doSlide) {
+	    determineEventElem(doSlide);
+	    if (doSlide.config.listenUserMouseWheel) {
+	        listenUserMouseWheel(doSlide, doSlide.eventEl);
+	    }
+	    if (doSlide.config.listenUserSwipe) {
+	        listenUserSwipe(doSlide, doSlide.eventEl);
+	    }
+	}
+
+	function determineEventElem(doSlide) {
 	    var selector = doSlide.config.eventElemSelector;
 	    if (selector === null) {
 	        doSlide.eventEl = doSlide.el;
 	    } else {
 	        doSlide.eventEl = selector.nodeType ? selector : document.querySelector(selector);
 	    }
-	    if (doSlide.config.listenUserMouseWheel) {
-	        listenUserMouseWheel(doSlide, doSlide.eventEl);
-	    }
-	    if (doSlide.config.listenUserSlide) {
-	        listenUserSlide(doSlide, doSlide.eventEl);
-	    }
 	}
 
 	function listenUserMouseWheel(doSlide, eventElem) {
 	    _util2.default.onMouseWheel(eventElem, function (direction) {
-	        if (doSlide.isChanging) return;
+	        if (!doSlide.config.respondToUserEvent || doSlide.isChanging) return;
 	        doSlide.userEvent = {
 	            name: 'onUserMouseWheel',
 	            args: [direction]
@@ -826,11 +818,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	}
 
-	function listenUserSlide(doSlide, eventElem) {
-	    _util2.default.onSlide(eventElem, function (direction) {
-	        if (doSlide.isChanging) return;
+	function listenUserSwipe(doSlide, eventElem) {
+	    _util2.default.onSwipe(eventElem, function (direction) {
+	        if (!doSlide.config.respondToUserEvent || doSlide.isChanging) return;
 	        doSlide.userEvent = {
-	            name: 'onUserSlide',
+	            name: 'onUserSwipe',
 	            args: [direction]
 	        };
 	        if (doSlide.config.horizontal) {
@@ -848,12 +840,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.startListen = startListen;
 	exports.excuteEventCallbacks = excuteEventCallbacks;
 	exports.excuteUserEventCallbacks = excuteUserEventCallbacks;
-
-/***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-	module.exports = "LmRvLXNsaWRlLXBhcmVudCB7DQogICAgbWFyZ2luOiAwOw0KICAgIHBhZGRpbmc6IDA7DQogICAgb3ZlcmZsb3c6IGhpZGRlbjsNCn0NCg0KLmRvLXNsaWRlLWNvbnRhaW5lciB7DQogICAgcG9zaXRpb246IGFic29sdXRlOw0KICAgIG1hcmdpbjogMDsNCiAgICBwYWRkaW5nOiAwOw0KICAgIHdpZHRoOiAxMDAlOw0KICAgIGhlaWdodDogMTAwJTsNCiAgICBvdmVyZmxvdzogaGlkZGVuOw0KfQ0KDQouZG8tc2xpZGUtc2VjdGlvbiB7DQogICAgcG9zaXRpb246IGFic29sdXRlOw0KICAgIHdpZHRoOiAxMDAlOw0KICAgIGhlaWdodDogMTAwJTsNCiAgICBvdmVyZmxvdzogaGlkZGVuOw0KfQ=="
 
 /***/ }
 /******/ ])
