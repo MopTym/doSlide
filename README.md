@@ -37,7 +37,7 @@ DoSlide is a light, no dependency and low invasive JS plugin, providing a patter
 
 Take a quick look at [introduction page](http://app.moptym.com/do-slide).
 
-Noted: In order to optimize performance (especially on mobile), the version 1.0.0 change the default switch (scroll) mechanism, meanwhile, the way of including CSS and other places have been changed, so it's not compatible with previous versions.
+Noted: In order to optimize performance (especially on mobile), the version 1.0.0 changes the default switch (scroll) mechanism, meanwhile, the way of including CSS and other places have been changed, so it's not compatible with previous versions.
 
 <br>
 
