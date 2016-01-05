@@ -321,8 +321,6 @@ A more detailed explanation of the configurations follows below:
     </tbody>
 </table>
 
-注意：`parent`只是为了快捷实现嵌套的父子联动而设置的属性，你完全可以不使用`parent`而利用`onOverRange()`和`stopPropagation`来实现。
-
 Noted: `parent` just a shortcut that be used to implement linkage in nested structure quickly, you can totally implement the linkage by using `onOverRange()` and `stopPropagation` instead of using `parent`.
 
 <br>
