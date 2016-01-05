@@ -6,6 +6,7 @@
         <meta name="renderer" content="webkit">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
         <title>Set class</title>
+        <link rel="stylesheet" href="../dist/do-slide.min.css">
         <link rel="stylesheet" href="css/common.css">
         <style>
             .column {
@@ -19,33 +20,50 @@
         </style>
     </head>
     <body>
-        <div class="column left">
-            <div class="container">
-                <div class="section"></div>
-                <div class="section"></div>
-                <div class="section"></div>
-                <div class="section"></div>
+        <div class="ds-parent column left">
+            <div class="ds-container container">
+                <div class="section">
+                    <span class="arrow down"></span>
+                </div>
+                <div class="section">
+                    <span class="arrow down"></span>
+                    <span class="arrow up"></span>
+                </div>
+                <div class="section">
+                    <span class="arrow up"></span>
+                </div>
             </div>
         </div>
-        <div class="column right">
-            <div class="container">
-                <div class="section"></div>
-                <div class="section"></div>
-                <div class="section"></div>
-                <div class="section"></div>
+        <div class="ds-parent column right">
+            <div class="ds-container container">
+                <div class="section">
+                    <span class="arrow right"></span>
+                </div>
+                <div class="section">
+                    <span class="arrow left"></span>
+                    <span class="arrow right"></span>
+                </div>
+                <div class="section">
+                    <span class="arrow left"></span>
+                </div>
             </div>
         </div>
         <script type="text/javascript" src="../dist/do-slide.min.js"></script>
         <script type="text/javascript">
-        
+
             var slideLeft = new DoSlide('.left .container', {
-                parentClass: 'column'
+                activeClass: 'left-active',
+                transitionInClass: 'left-in',
+                transitionOutClass: 'left-out',
             })
-            
+
             var slideRight = DoSlide.from(slideLeft, '.right .container', {
-                horizontal: true
+                horizontal: true,
+                activeClass: 'right-active',
+                transitionInClass: 'right-in',
+                transitionOutClass: 'right-out',
             })
-            
+
         </script>
     </body>
 </html>

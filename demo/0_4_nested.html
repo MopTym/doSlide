@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="renderer" content="webkit">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <title>Nested</title>
+        <link rel="stylesheet" href="../dist/do-slide.min.css">
+        <link rel="stylesheet" href="css/common.css">
+    </head>
+    <body class="ds-parent">
+        <!-- parent -->
+        <div class="ds-container container root-container">
+            <div class="section">
+                <span class="arrow down"></span>
+            </div>
+            <div class="section">
+                <span class="arrow up"></span>
+                <span class="arrow down"></span>
+            </div>
+            <div class="section ds-parent">
+                <!-- child -->
+                <div class="ds-container container sub-container">
+                    <div class="section sub">
+                        <span class="arrow up"></span>
+                        <span class="arrow down"></span>
+                    </div>
+                    <div class="section sub">
+                        <span class="arrow up"></span>
+                        <span class="arrow down"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <span class="arrow up"></span>
+            </div>
+        </div>
+        <script type="text/javascript" src="../dist/do-slide.min.js"></script>
+        <script type="text/javascript">
+
+            var rootSlide = new DoSlide('.root-container')
+            var subSlide = new DoSlide('.sub-container', {
+                parent: rootSlide,
+                stopPropagation: true
+            })
+
+            // so far, we have already realized nested structure.
+
+            /*********************************************************/
+
+            /**
+            * if sensitive with 'active' class, you may need to code such as following
+            */
+
+            // when inited / leave subSlide, remove 'active' class
+            subSlide.do(function(curIndex, cur) {
+                this.$.removeClass(cur, 'active')
+            }).onOverRange(function(curIndex, tarIndex, cur) {
+                this.$.removeClass(cur, 'active')
+            })
+            // when into subSlide, add 'active' class
+            rootSlide.onBeforeChange(function(curIndex, tarIndex) {
+                if (tarIndex === 2) {
+                    this.$.addClass(subSlide.currentSection, 'active')
+                }
+            })
+
+            /**
+            * if wanna forbid user switch sub sections when in parent transition, you may need to code such as following
+            */
+
+            rootSlide.onBeforeChange(function() {
+                subSlide.set('respondToUserEvent', false)
+            }).onChanged(function() {
+                subSlide.set('respondToUserEvent', true)
+            })
+
+        </script>
+    </body>
+</html>

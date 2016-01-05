@@ -20,31 +20,35 @@ function excuteEventCallbacks(doSlide, event) {
 
 function excute(callbacks, args, context, breakValue) {
     return $.forEach(
-        callbacks, 
-        (callback) => callback.apply(context, args), 
+        callbacks,
+        (callback) => callback.apply(context, args),
         null,
         breakValue
     )
 }
 
 function startListen(doSlide) {
+    determineEventElem(doSlide)
+    if (doSlide.config.listenUserMouseWheel) {
+        listenUserMouseWheel(doSlide, doSlide.eventEl)
+    }
+    if (doSlide.config.listenUserSwipe) {
+        listenUserSwipe(doSlide, doSlide.eventEl)
+    }
+}
+
+function determineEventElem(doSlide) {
     let selector = doSlide.config.eventElemSelector
     if (selector === null) {
         doSlide.eventEl = doSlide.el
     } else {
         doSlide.eventEl = selector.nodeType? selector: document.querySelector(selector)
     }
-    if (doSlide.config.listenUserMouseWheel) {
-        listenUserMouseWheel(doSlide, doSlide.eventEl)
-    }
-    if (doSlide.config.listenUserSlide) {
-        listenUserSlide(doSlide, doSlide.eventEl)
-    }
 }
 
 function listenUserMouseWheel(doSlide, eventElem) {
     $.onMouseWheel(eventElem, (direction) => {
-        if (doSlide.isChanging) return
+        if (!doSlide.config.respondToUserEvent || doSlide.isChanging) return
         doSlide.userEvent = {
             name: 'onUserMouseWheel',
             args: [direction]
@@ -57,11 +61,11 @@ function listenUserMouseWheel(doSlide, eventElem) {
     }, () => doSlide.config.stopPropagation)
 }
 
-function listenUserSlide(doSlide, eventElem) {
-    $.onSlide(eventElem, (direction) => {
-        if (doSlide.isChanging) return
+function listenUserSwipe(doSlide, eventElem) {
+    $.onSwipe(eventElem, (direction) => {
+        if (!doSlide.config.respondToUserEvent || doSlide.isChanging) return
         doSlide.userEvent = {
-            name: 'onUserSlide',
+            name: 'onUserSwipe',
             args: [direction]
         }
         if (doSlide.config.horizontal) {

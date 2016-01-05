@@ -7,29 +7,37 @@ const supportedTransform = $.getSupportedCSS('transform')
 
 
 function initSections(doSlide, initIndex) {
-    $(doSlide.sections).css(
-        supportedTransform?
-        { [supportedTransform]: 'translate' + (doSlide.config.horizontal? 'X': 'Y') + '(100%)' }:
-        { display: 'none' }
-    )
-    showSection(doSlide, initIndex, false, true)
+    let $container = $(doSlide.el)
+    let $sections = $(doSlide.sections)
+    if (doSlide.config.horizontal) {
+        $container.css('width', $sections.length + '00%')
+        $sections.css({
+            width: (100 / $sections.length) + '%',
+            float: 'left'
+        })
+    } else {
+        $container.css('height', $sections.length + '00%')
+        $sections.css('height', (100 / $sections.length) + '%')
+    }
+    showSection(doSlide, initIndex, true)
 }
 
-function showSection(doSlide, index, isNext, isImmediate) {
+function showSection(doSlide, index, isImmediate) {
     let cur = doSlide.currentSection, tar = doSlide.sections[index], config = doSlide.config
-    let busyTime = (isImmediate? 0: 1) * (config.minInterval + (supportedTransition? config.duration: 0))
+    let busyTime = config.minInterval + (supportedTransition? config.duration: 0)
     doSlide.isChanging = true
     if (!doSlide.config.silent) {
         setActiveClass(doSlide, index)
         toggleTransitionClass(config, cur, tar, true)
-        transform(doSlide, index, isNext, isImmediate)
+        transform(doSlide, index, isImmediate)
     }
     setTimeout(() => {
-        if (!doSlide.config.silent) {
+        if (!config.silent) {
             toggleTransitionClass(config, cur, tar, false)
         }
         doSlide.isChanging = false
-    }, busyTime)
+    }, isImmediate? 0: busyTime)
+    return busyTime
 }
 
 function toggleTransitionClass(config, cur, tar, isAdd) {
@@ -52,27 +60,26 @@ function setActiveClass(doSlide, index) {
     })
 }
 
-function change(doSlide, index, isNext) {
+function change(doSlide, index) {
     if (canChangeNow(doSlide, index)) {
-        let lastIndex = doSlide.currentIndex
         if (isOverRange(doSlide, index)) {
-            excuteEventCallbacks(doSlide, {
-                name: 'onOverRange',
-                args: [lastIndex, index, doSlide.currentSection]
-            })
+            doingOnOverRange(doSlide, index)
         } else if (excuteUserEventCallbacks(doSlide)) {
+            let lastIndex = doSlide.currentIndex
             let isOK = excuteEventCallbacks(doSlide, {
                 name: 'onBeforeChange',
                 args: [lastIndex, index, doSlide.currentSection, doSlide.sections[index]]
             })
             if (isOK) {
-                showSection(doSlide, index, isNext)
+                let busyTime = showSection(doSlide, index)
                 doSlide.currentIndex = index
                 doSlide.currentSection = doSlide.sections[index]
-                excuteEventCallbacks(doSlide, {
-                    name: 'onChanged',
-                    args: [index, lastIndex, doSlide.currentSection, doSlide.sections[lastIndex]]
-                })
+                setTimeout(() => {
+                    excuteEventCallbacks(doSlide, {
+                        name: 'onChanged',
+                        args: [index, lastIndex, doSlide.currentSection, doSlide.sections[lastIndex]]
+                    })
+                }, busyTime)
             }
         }
     }
@@ -86,42 +93,37 @@ function isOverRange(doSlide, index) {
     return (index < 0 || index >= doSlide.sections.length)
 }
 
-function transform(doSlide, index, isNext, isImmediate) {
-    let children = doSlide.sections, maxIndex = children.length - 1, curIndex = doSlide.currentIndex
-    let cur = doSlide.currentSection, tar = children[index], config = doSlide.config
-    if (supportedTransform) {
-        let isLoop = isInLoopBoundary(curIndex, index, maxIndex, isNext)
-        let direction = config.horizontal? 'X': 'Y'
-        let translate = (isLoop? -1: 1) * (index > curIndex? 100: -100)
-        let transition = supportedTransform + ' ' + (config.timingFunction || '') + ' ' + config.duration + 'ms'
-        let transitionClean = supportedTransform + ' 0ms'
-        transition = isImmediate? transitionClean: transition
-        $.css(tar, {
-            [supportedTransition]: transitionClean,
-            [supportedTransform]: 'translate' + direction + '(' + translate + '%)'
-        })
-        tar && tar.clientWidth // read a property for triggering page reflow
-        $.css(cur, {
-            [supportedTransition]: transition,
-            [supportedTransform]: 'translate' + direction + '(' + -translate + '%)'
-        })
-        $.css(tar, {
-            [supportedTransition]: transition,
-            [supportedTransform]: 'translate' + direction + '(0)'
-        })
-    } else {
-        $.css(cur, { display: 'none' })
-        $.css(tar, { display: 'block' })
+function doingOnOverRange(doSlide, index) {
+    let parent = doSlide.config.parent
+    let isOK = excuteEventCallbacks(doSlide, {
+        name: 'onOverRange',
+        args: [doSlide.currentIndex, index, doSlide.currentSection]
+    })
+    if (isOK && parent) {
+        if (index < 0) {
+            parent.prev()
+        } else {
+            parent.next()
+        }
     }
 }
 
-function isInLoopBoundary(curIndex, tarIndex, maxIndex, isNext) {
-    return (
-        (curIndex === 0 && tarIndex === maxIndex && !isNext)
-        ||
-        (curIndex === maxIndex && tarIndex === 0 && isNext)
-    )
+function transform(doSlide, index, isImmediate) {
+    let config = doSlide.config
+    if (supportedTransform) {
+        let direction = config.horizontal? 'X': 'Y'
+        let offset = (-index * 100 / doSlide.sections.length) + '%'
+        let transition = supportedTransform + ' ' + (config.timingFunction || '') + ' ' + config.duration + 'ms'
+        let transitionClean = supportedTransform + ' 0ms'
+        $.css(doSlide.el, {
+            [supportedTransition]: isImmediate? transitionClean: transition,
+            [supportedTransform]: 'translate' + direction + '(' + offset + ')'
+        })
+    } else {
+        $.css(doSlide.el, (config.horizontal? 'top': 'left'), offset)
+    }
 }
+
 
 
 export { initSections, change }

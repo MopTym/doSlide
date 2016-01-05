@@ -6,6 +6,7 @@
         <meta name="renderer" content="webkit">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
         <title>Slider</title>
+        <link rel="stylesheet" href="../dist/do-slide.min.css">
         <style>
             body {
                 position: absolute;
@@ -50,8 +51,8 @@
     </head>
     <body>
         <div class="wrap">
-            <div class="slider">
-                <div class="container">
+            <div class="ds-parent slider">
+                <div class="ds-container container">
                     <div><img src="./images/1.jpg" class="img"></div>
                     <div><img src="./images/2.jpg" class="img"></div>
                     <div><img src="./images/3.jpg" class="img"></div>
@@ -60,11 +61,11 @@
             <h1>Simple Slider</h1>
             <p>Use mouse wheel / slide to switch images.</p>
             <p>To get more details about the images, please read <a href="https://github.com/MopTym/doSlide/tree/master/demo/images">README.md</a>.</p>
-            
+
         </div>
         <script type="text/javascript" src="../dist/do-slide.min.js"></script>
         <script type="text/javascript">
-        
+
             var timer = function(slide, interval, token) {
                 function next() {
                     token = setTimeout(next, interval)
@@ -77,13 +78,13 @@
                     token = setTimeout(next, interval)
                 }
             }
-            
+
             var slide = new DoSlide('.container', {
                 duration: 1000,
                 horizontal: true,
                 infinite: true
             }), slideTimer = timer(slide, 4000)
-            
+
             slide.onChanged(slideTimer).do(slideTimer)
 
         </script>
