@@ -1,6 +1,6 @@
 ![preview](do-slide.jpg)
 
-# DoSlide
+# DoSlide (frozen on v0.1.5)
 
 [![Build Status](https://img.shields.io/travis/MopTym/doSlide.svg?style=flat-square)](https://travis-ci.org/MopTym/doSlide)
 [![Version](https://img.shields.io/npm/v/do-slide.svg?style=flat-square)](https://www.npmjs.com/package/do-slide)
