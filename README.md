@@ -37,7 +37,7 @@ DoSlide is a light, no dependency and low invasive JS plugin, providing a patter
 
 Take a quick look at [introduction page](http://app.moptym.com/do-slide).
 
-Noted: In order to optimize performance (especially on mobile), the version 1.0.0 change the default switch (scroll) mechanism, meanwhile, the way of including CSS and other places have been changed, so it's not compatible with previous versions.
+Noted: In order to optimize performance (especially on mobile), the version 1.0.0 changes the default switch (scroll) mechanism, meanwhile, the way of including CSS and other places have been changed, so it's not compatible with previous versions.
 
 <br>
 
@@ -77,7 +77,7 @@ Then create a corresponding DoSlide object:
 var slide = new DoSlide('.ds-container', {/* configurations */})
 ```
 
-The CSS file content ([do-slide.css](dist/do-slide.css)) is very simple, you can copy it to your project CSS to prevent include the file alone (if don't take update into account) . Default `ds-parent` class doesn't set `position` property (not be positioned) , you can set it when you need.
+The CSS file content ([do-slide.css](dist/do-slide.css)) is very simple, you can copy it to your project CSS to prevent including the file alone (if don't take update into account) . Default `ds-parent` class doesn't set `position` property (not be positioned) , you can set it when you need.
 
 <br>
 
@@ -320,8 +320,6 @@ A more detailed explanation of the configurations follows below:
         </tr>
     </tbody>
 </table>
-
-注意：`parent`只是为了快捷实现嵌套的父子联动而设置的属性，你完全可以不使用`parent`而利用`onOverRange()`和`stopPropagation`来实现。
 
 Noted: `parent` just a shortcut that be used to implement linkage in nested structure quickly, you can totally implement the linkage by using `onOverRange()` and `stopPropagation` instead of using `parent`.
 
