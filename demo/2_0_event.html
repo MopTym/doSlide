@@ -35,23 +35,23 @@
                 console.log('onBeforeChange', {
                     curIndex: curIndex,
                     tarIndex: tarIndex,
-                    cur, cur,
-                    tar, tar,
+                    cur: cur,
+                    tar: tar,
                     this: this
                 })
             }).onChanged(function(curIndex, lastIndex, cur, last) {
                 console.log('onChanged', {
                     curIndex: curIndex,
                     lastIndex: lastIndex,
-                    cur, cur,
-                    last, last,
+                    cur: cur,
+                    last: last,
                     this: this
                 })
             }).onOverRange(function(curIndex, tarIndex, cur) {
                 console.log('onOverRange', {
                     curIndex: curIndex,
                     tarIndex: tarIndex,
-                    cur, cur,
+                    cur: cur,
                     this: this
                 })
             }).onUserMouseWheel(function(direction) {
