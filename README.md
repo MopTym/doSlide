@@ -37,7 +37,7 @@ DoSlide is a light, no dependency and low invasive JS plugin, providing a patter
 
 Take a quick look at [introduction page](http://app.moptym.com/do-slide).
 
-Noted: In order to optimize performance (especially on mobile), the version 1.0.0 changes the default switch (scroll) mechanism, meanwhile, the way of including CSS and other places have been changed, so it's not compatible with previous versions.
+**Noted:** In order to optimize performance (especially on mobile), the version 1.0.0 changes the default switch (scroll) mechanism, meanwhile, the way of including CSS and other places have been changed, so it's not compatible with previous versions.
 
 <br>
 
@@ -77,7 +77,54 @@ Then create a corresponding DoSlide object:
 var slide = new DoSlide('.ds-container', {/* configurations */})
 ```
 
-The CSS file content ([do-slide.css](dist/do-slide.css)) is very simple, you can copy it to your project CSS to prevent including the file alone (if don't take update into account) . Default `ds-parent` class doesn't set `position` property (not be positioned) , you can set it when you need.
+The CSS file content ([do-slide.css](dist/do-slide.css)) is very simple, you can copy it to your project CSS instead of including the file alone (if don't take update into account) . Default `ds-parent` class doesn't set `position` property (not be positioned) and size properties, you can set them when you need.
+
+**Noted:** Do not use `<body>` as parent element, it may cause a problem with height in some Android browsers which have auto-hide location bar ([issue#8](https://github.com/MopTym/doSlide/issues/8)) , don't do this:
+```html
+<body class="ds-parent"> <!-- Do not use 'body' as parent element -->
+    <div class="ds-container">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</body>
+```
+This structure is OK:
+```html
+<body>
+    <div class="ds-parent">
+        <div class="ds-container">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</body>
+```
+
+**TL;DR:** The basic code to apply full page scrolling:
+```html
+<body>
+    <div class="wrap ds-parent">
+        <div class="ds-container">
+            <div>Section 1</div>
+            <div>Section 2</div>
+            <div>Section 3</div>
+        </div>
+    </div>
+</body>
+```
+```css
+body {
+    margin: 0;
+    padding: 0;
+}
+.wrap {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+```
 
 <br>
 
@@ -96,11 +143,13 @@ Assume there is a HTML structure:
     <head>
         ......
     </head>
-    <body class="ds-parent">
-        <div class="ds-container ds-init">
-            <div class="section-1"></div>
-            <div class="section-2"></div>
-            <div class="section-3"></div>
+    <body>
+        <div class="ds-parent">
+            <div class="ds-container ds-init">
+                <div class="section-1"></div>
+                <div class="section-2"></div>
+                <div class="section-3"></div>
+            </div>
         </div>
         ......
     </body>
@@ -126,12 +175,14 @@ Then the HTML will look like:
     <head>
         ......
     </head>
-    <body class="ds-parent">
-        <div class="ds-container">
-            <div class="section-1 active"></div>
-            <div class="section-2"></div>
-            <div class="section-3"></div>
-        </div
+    <body>
+        <div class="ds-parent">
+            <div class="ds-container">
+                <div class="section-1 active"></div>
+                <div class="section-2"></div>
+                <div class="section-3"></div>
+            </div>
+        </div>
         ......
     </body>
 </html>
@@ -328,7 +379,7 @@ A more detailed explanation of the configurations follows below:
     </tbody>
 </table>
 
-Noted: `parent` just a shortcut that be used to implement linkage in nested structure quickly, you can totally implement the linkage by using `onOverRange()` and `stopPropagation` instead of using `parent`.
+**Noted:** `parent` just a shortcut that be used to implement linkage in nested structure quickly, you can totally implement the linkage by using `onOverRange()` and `stopPropagation` instead of using `parent`.
 
 <br>
 
