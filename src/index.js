@@ -34,6 +34,8 @@ const DEFAULT_CONFIG = {
     timingFunction       : 'ease',
     minInterval          : 50,
 
+    translate3d          : true,
+
     parent               : null,
 
     respondToUserEvent   : true,

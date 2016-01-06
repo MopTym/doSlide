@@ -184,6 +184,8 @@ const DEFAULT_CONFIG = {
     timingFunction       : 'ease',
     minInterval          : 50,
 
+    translate3d          : true,
+
     parent               : null,
 
     respondToUserEvent   : true,
@@ -302,6 +304,11 @@ A more detailed explanation of the configurations follows below:
             <td>minInterval</td>
             <td>50</td>
             <td>The minimum time interval between switching.</td>
+        </tr>
+        <tr>
+            <td>translate3d</td>
+            <td>true</td>
+            <td>Defines whether to use CSS <code>translate3d</code> or not.</td>
         </tr>
         <tr>
             <td>parent</td>

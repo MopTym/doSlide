@@ -5,6 +5,18 @@ import { excuteEventCallbacks, excuteUserEventCallbacks } from './event'
 const supportedTransition = $.getSupportedCSS('transition')
 const supportedTransform = $.getSupportedCSS('transform')
 
+const isSupport3d = (() => {
+    let has3d = false
+    if (supportedTransform && window.getComputedStyle) {
+        let el = document.createElement('div')
+        document.body.insertBefore(el, null)
+        el.style[supportedTransform] = 'translate3d(1%, 1%, 0)'
+        has3d = window.getComputedStyle(el).getPropertyValue(supportedTransform)
+        document.body.removeChild(el)
+    }
+    return (has3d && has3d !== 'none')
+})()
+
 
 function initSections(doSlide, initIndex) {
     let $container = $(doSlide.el)
@@ -23,20 +35,25 @@ function initSections(doSlide, initIndex) {
 }
 
 function showSection(doSlide, index, isImmediate) {
-    let cur = doSlide.currentSection, tar = doSlide.sections[index], config = doSlide.config
+    let cur = doSlide.currentSection
+    let tar = doSlide.sections[index]
+    let config = doSlide.config
     let busyTime = config.minInterval + (supportedTransition? config.duration: 0)
+    busyTime = isImmediate? 0: busyTime
     doSlide.isChanging = true
     if (!doSlide.config.silent) {
         setActiveClass(doSlide, index)
-        toggleTransitionClass(config, cur, tar, true)
+        if (!isImmediate) {
+            toggleTransitionClass(config, cur, tar, true)
+        }
         transform(doSlide, index, isImmediate)
     }
     setTimeout(() => {
-        if (!config.silent) {
+        if (!config.silent && !isImmediate) {
             toggleTransitionClass(config, cur, tar, false)
         }
         doSlide.isChanging = false
-    }, isImmediate? 0: busyTime)
+    }, busyTime)
     return busyTime
 }
 
@@ -111,19 +128,21 @@ function doingOnOverRange(doSlide, index) {
 function transform(doSlide, index, isImmediate) {
     let config = doSlide.config
     if (supportedTransform) {
-        let direction = config.horizontal? 'X': 'Y'
+        if (supportedTransition) {
+            let transition = supportedTransform + ' ' + (config.timingFunction || '') + ' ' + config.duration + 'ms'
+            let transitionClean = supportedTransform + ' 0ms'
+            $.css(doSlide.el, supportedTransition, (isImmediate? transitionClean: transition))
+        }
         let offset = (-index * 100 / doSlide.sections.length) + '%'
-        let transition = supportedTransform + ' ' + (config.timingFunction || '') + ' ' + config.duration + 'ms'
-        let transitionClean = supportedTransform + ' 0ms'
-        $.css(doSlide.el, {
-            [supportedTransition]: isImmediate? transitionClean: transition,
-            [supportedTransform]: 'translate' + direction + '(' + offset + ')'
-        })
+        let translate = config.horizontal? (offset + ',0'): ('0,' + offset)
+        translate = isSupport3d && config.translate3d?
+                    'translate3d(' + translate + ',0)':
+                    'translate(' + translate + ')'
+        $.css(doSlide.el, supportedTransform, translate)
     } else {
-        $.css(doSlide.el, (config.horizontal? 'top': 'left'), offset)
+        $.css(doSlide.el, (config.horizontal? 'left': 'top'), -index + '00%')
     }
 }
-
 
 
 export { initSections, change }
