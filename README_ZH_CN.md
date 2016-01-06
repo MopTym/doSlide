@@ -8,7 +8,7 @@
 
 整屏滚动 / 轮播 / 无依赖 / Gzip后小于5KB
 
-=
+<br>
 
 [English Version](README.md)
 
@@ -29,7 +29,7 @@
 - [使用示例](#使用示例)
 - [开发贡献](#开发贡献)
 
-=
+<br>
 
 ## 插件介绍
 
@@ -37,7 +37,7 @@ DoSlide是个轻巧、无依赖、低侵入性的JS插件，提供一次切换�
 
 若需快速了解此插件，请访问[介绍页面](http://app.moptym.com/do-slide)。
 
-注意：版本1.0.0为了优化（特别是移动端）而改变了默认的切换机制，并且CSS的引入方式以及其它一些地方都做了较大的改变，所以代码与1.0.0之前的版本不兼容。
+**注意：** 版本1.0.0为了优化（特别是移动端）而改变了默认的切换机制，并且CSS的引入方式以及其它一些地方都做了较大的改变，所以代码与1.0.0之前的版本不兼容。
 
 <br>
 
@@ -78,6 +78,53 @@ var slide = new DoSlide('.ds-container', {/* 配置选项 */})
 
 所引入的CSS文件内容（[do-slide.css](dist/do-slide.css)）非常简单，你完全可以将其拷贝到项目CSS中而不需要再单独引入这个文件（如果不顾略升级的话）。默认`ds-parent`类并不设置`position`属性，如有需要请自行设置。
 
+**注意：** 请不要把`<body>`当作父元素，这在某些可自动隐藏地址栏的移动端浏览器下会出现高度异常的情况（[issue#8](https://github.com/MopTym/doSlide/issues/8)），即不要使用这样的结构：
+```html
+<body class="ds-parent"> <!-- 不要把body当作父元素 -->
+    <div class="ds-container">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</body>
+```
+而这样子是可以的：
+```html
+<body>
+    <div class="ds-parent">
+        <div class="ds-container">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</body>
+```
+
+**太长不看：** 应用整屏滚动基础代码：
+```html
+<body>
+    <div class="wrap ds-parent">
+        <div class="ds-container">
+            <div>Section 1</div>
+            <div>Section 2</div>
+            <div>Section 3</div>
+        </div>
+    </div>
+</body>
+```
+```css
+body {
+    margin: 0;
+    padding: 0;
+}
+.wrap {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+```
+
 <br>
 
 具体的使用可以参考[使用示例](#使用示例)。
@@ -95,11 +142,13 @@ var slide = new DoSlide('.ds-container', {/* 配置选项 */})
     <head>
         ......
     </head>
-    <body class="ds-parent">
-        <div class="ds-container ds-init">
-            <div class="section-1"></div>
-            <div class="section-2"></div>
-            <div class="section-3"></div>
+    <body>
+        <div class="ds-parent">
+            <div class="ds-container ds-init">
+                <div class="section-1"></div>
+                <div class="section-2"></div>
+                <div class="section-3"></div>
+            </div>
         </div>
         ......
     </body>
@@ -124,12 +173,14 @@ new DoSlide('.ds-container')
     <head>
         ......
     </head>
-    <body class="ds-parent">
-        <div class="ds-container">
-            <div class="section-1 active"></div>
-            <div class="section-2"></div>
-            <div class="section-3"></div>
-        </div
+    <body>
+        <div class="ds-parent">
+            <div class="ds-container">
+                <div class="section-1 active"></div>
+                <div class="section-2"></div>
+                <div class="section-3"></div>
+            </div>
+        </div>
         ......
     </body>
 </html>
@@ -322,7 +373,7 @@ slide.set({
     </tbody>
 </table>
 
-注意：`parent`只是为了快捷实现嵌套的父子联动而设置的属性，你完全可以不使用`parent`而利用`onOverRange()`和`stopPropagation`来实现。
+**注意：** `parent`只是为了快捷实现嵌套的父子联动而设置的属性，你完全可以不使用`parent`而利用`onOverRange()`和`stopPropagation`来实现。
 
 <br>
 
