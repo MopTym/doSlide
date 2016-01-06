@@ -32,7 +32,7 @@
     "webpack-dev-server": "^1.14.0"
   },
   "dependencies": {
-    "do-slide": "^1.0.0",
+    "do-slide": "^1.0.1",
     "octocat-icon-font": "^1.0.0"
   }
 }
