@@ -1,5 +1,5 @@
 /*!
- * DoSlide v1.0.0
+ * DoSlide v1.0.1
  * (c) 2016 MopTym <moptym@163.com>
  * Released under the MIT License.
  * Homepage - https://github.com/MopTym/doSlide
@@ -107,6 +107,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    duration: 1000,
 	    timingFunction: 'ease',
 	    minInterval: 50,
+
+	    translate3d: true,
 
 	    parent: null,
 
@@ -252,8 +254,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var MAX_TOUCH_TIME = 800;
 	var SLIDE_THRESHOLD = 50;
-
-	var IS_FIREFOX = /Firefox/i.test((navigator || {}).userAgent);
 
 	var util = function util(selector) {
 	    return new util.prototype.Init(selector);
@@ -455,14 +455,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } : arguments[2];
 
 	        if (!elem || !callback) return;
-	        var mouseWheel = IS_FIREFOX ? 'DOMMouseScroll' : 'mousewheel';
-	        elem.addEventListener(mouseWheel, function (event) {
-	            event.preventDefault();
-	            if (isStopPropFn()) event.stopPropagation();
-	            var delta = event.detail ? event.detail * -120 : event.wheelDelta;
-	            var direction = _defineProperty({}, delta < 0 ? 'down' : 'up', true);
-	            callback.call(elem, direction);
-	        }, false);
+	        ['DOMMouseScroll', 'mousewheel'].map(function (mouseWheel) {
+	            elem.addEventListener(mouseWheel, function (event) {
+	                event.preventDefault();
+	                if (isStopPropFn()) event.stopPropagation();
+	                var delta = event.detail ? event.detail * -120 : event.wheelDelta;
+	                var direction = _defineProperty({}, delta < 0 ? 'down' : 'up', true);
+	                callback.call(elem, direction);
+	            }, false);
+	        });
 	    },
 	    onSwipe: function onSwipe(elem, callback) {
 	        var isStopPropFn = arguments.length <= 2 || arguments[2] === undefined ? function () {
@@ -613,10 +614,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 	var supportedTransition = _util2.default.getSupportedCSS('transition');
 	var supportedTransform = _util2.default.getSupportedCSS('transform');
+
+	var isSupport3d = (function () {
+	    var has3d = false;
+	    if (supportedTransform && window.getComputedStyle) {
+	        var el = document.createElement('div');
+	        document.body.insertBefore(el, null);
+	        el.style[supportedTransform] = 'translate3d(1%, 1%, 0)';
+	        has3d = window.getComputedStyle(el).getPropertyValue(supportedTransform);
+	        document.body.removeChild(el);
+	    }
+	    return has3d && has3d !== 'none';
+	})();
 
 	function initSections(doSlide, initIndex) {
 	    var $container = (0, _util2.default)(doSlide.el);
@@ -635,22 +646,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	function showSection(doSlide, index, isImmediate) {
-	    var cur = doSlide.currentSection,
-	        tar = doSlide.sections[index],
-	        config = doSlide.config;
+	    var cur = doSlide.currentSection;
+	    var tar = doSlide.sections[index];
+	    var config = doSlide.config;
 	    var busyTime = config.minInterval + (supportedTransition ? config.duration : 0);
+	    busyTime = isImmediate ? 0 : busyTime;
 	    doSlide.isChanging = true;
 	    if (!doSlide.config.silent) {
 	        setActiveClass(doSlide, index);
-	        toggleTransitionClass(config, cur, tar, true);
+	        if (!isImmediate) {
+	            toggleTransitionClass(config, cur, tar, true);
+	        }
 	        transform(doSlide, index, isImmediate);
 	    }
 	    setTimeout(function () {
-	        if (!config.silent) {
+	        if (!config.silent && !isImmediate) {
 	            toggleTransitionClass(config, cur, tar, false);
 	        }
 	        doSlide.isChanging = false;
-	    }, isImmediate ? 0 : busyTime);
+	    }, busyTime);
 	    return busyTime;
 	}
 
@@ -727,15 +741,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	function transform(doSlide, index, isImmediate) {
 	    var config = doSlide.config;
 	    if (supportedTransform) {
-	        var _$$css;
-
-	        var direction = config.horizontal ? 'X' : 'Y';
-	        var _offset = -index * 100 / doSlide.sections.length + '%';
-	        var transition = supportedTransform + ' ' + (config.timingFunction || '') + ' ' + config.duration + 'ms';
-	        var transitionClean = supportedTransform + ' 0ms';
-	        _util2.default.css(doSlide.el, (_$$css = {}, _defineProperty(_$$css, supportedTransition, isImmediate ? transitionClean : transition), _defineProperty(_$$css, supportedTransform, 'translate' + direction + '(' + _offset + ')'), _$$css));
+	        if (supportedTransition) {
+	            var transition = supportedTransform + ' ' + (config.timingFunction || '') + ' ' + config.duration + 'ms';
+	            var transitionClean = supportedTransform + ' 0ms';
+	            _util2.default.css(doSlide.el, supportedTransition, isImmediate ? transitionClean : transition);
+	        }
+	        var offset = -index * 100 / doSlide.sections.length + '%';
+	        var translate = config.horizontal ? offset + ',0' : '0,' + offset;
+	        translate = isSupport3d && config.translate3d ? 'translate3d(' + translate + ',0)' : 'translate(' + translate + ')';
+	        _util2.default.css(doSlide.el, supportedTransform, translate);
 	    } else {
-	        _util2.default.css(doSlide.el, config.horizontal ? 'top' : 'left', offset);
+	        _util2.default.css(doSlide.el, config.horizontal ? 'left' : 'top', -index + '00%');
 	    }
 	}
 

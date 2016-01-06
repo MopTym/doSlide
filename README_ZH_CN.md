@@ -178,6 +178,8 @@ const DEFAULT_CONFIG = {
     timingFunction       : 'ease',
     minInterval          : 50,
 
+    translate3d          : true,
+
     parent               : null,
 
     respondToUserEvent   : true,
@@ -296,6 +298,11 @@ slide.set({
             <td>minInterval</td>
             <td>50</td>
             <td>两次切换的最小时间间隔（毫秒）</td>
+        </tr>
+        <tr>
+            <td>translate3d</td>
+            <td>true</td>
+            <td>切换时是否使用<code>translate3d</code></td>
         </tr>
         <tr>
             <td>parent</td>

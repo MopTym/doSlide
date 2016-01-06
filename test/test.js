@@ -205,8 +205,6 @@
 	var MAX_TOUCH_TIME = 800;
 	var SLIDE_THRESHOLD = 50;
 
-	var IS_FIREFOX = /Firefox/i.test((navigator || {}).userAgent);
-
 	var util = function util(selector) {
 	    return new util.prototype.Init(selector);
 	};
@@ -407,14 +405,15 @@
 	        } : arguments[2];
 
 	        if (!elem || !callback) return;
-	        var mouseWheel = IS_FIREFOX ? 'DOMMouseScroll' : 'mousewheel';
-	        elem.addEventListener(mouseWheel, function (event) {
-	            event.preventDefault();
-	            if (isStopPropFn()) event.stopPropagation();
-	            var delta = event.detail ? event.detail * -120 : event.wheelDelta;
-	            var direction = _defineProperty({}, delta < 0 ? 'down' : 'up', true);
-	            callback.call(elem, direction);
-	        }, false);
+	        ['DOMMouseScroll', 'mousewheel'].map(function (mouseWheel) {
+	            elem.addEventListener(mouseWheel, function (event) {
+	                event.preventDefault();
+	                if (isStopPropFn()) event.stopPropagation();
+	                var delta = event.detail ? event.detail * -120 : event.wheelDelta;
+	                var direction = _defineProperty({}, delta < 0 ? 'down' : 'up', true);
+	                callback.call(elem, direction);
+	            }, false);
+	        });
 	    },
 	    onSwipe: function onSwipe(elem, callback) {
 	        var isStopPropFn = arguments.length <= 2 || arguments[2] === undefined ? function () {

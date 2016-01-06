@@ -1,7 +1,6 @@
 const MAX_TOUCH_TIME = 800
 const SLIDE_THRESHOLD = 50
 
-const IS_FIREFOX = /Firefox/i.test((navigator || {}).userAgent)
 
 let util = (selector) => {
     return new util.prototype.Init(selector)
@@ -191,16 +190,17 @@ Object.assign(util, {
 
     onMouseWheel(elem, callback, isStopPropFn = () => false) {
         if (!elem || !callback) return
-        let mouseWheel = IS_FIREFOX? 'DOMMouseScroll': 'mousewheel'
-        elem.addEventListener(mouseWheel, (event) => {
-            event.preventDefault()
-            if (isStopPropFn()) event.stopPropagation()
-            let delta = event.detail? event.detail * (-120) : event.wheelDelta
-            let direction = {
-                [delta < 0? 'down': 'up']: true
-            }
-            callback.call(elem, direction)
-        }, false)
+        ['DOMMouseScroll', 'mousewheel'].map((mouseWheel) => {
+            elem.addEventListener(mouseWheel, (event) => {
+                event.preventDefault()
+                if (isStopPropFn()) event.stopPropagation()
+                let delta = event.detail? event.detail * (-120) : event.wheelDelta
+                let direction = {
+                    [delta < 0? 'down': 'up']: true
+                }
+                callback.call(elem, direction)
+            }, false)
+        })
     },
 
     onSwipe(elem, callback, isStopPropFn = () => false) {
