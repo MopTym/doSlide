@@ -118,6 +118,7 @@ This structure is OK:
 body {
     margin: 0;
     padding: 0;
+    overflow: hidden;
 }
 .wrap {
     position: absolute;

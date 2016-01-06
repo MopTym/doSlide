@@ -117,6 +117,7 @@ var slide = new DoSlide('.ds-container', {/* 配置选项 */})
 body {
     margin: 0;
     padding: 0;
+    overflow: hidden;
 }
 .wrap {
     position: absolute;
