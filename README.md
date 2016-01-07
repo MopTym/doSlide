@@ -33,7 +33,7 @@ Fullpage scroll / Section scroll / Slider / No denpendency / Gzipped size < 5KB
 
 ## Introduction
 
-DoSlide is a light, no dependency and low invasive JS plugin, providing a pattern which switch entire one section at a time. DoSlide can be flexibly configured and has a inner tool library like jQuery, you can implement specific requirements quickly by taking advantage of it.
+DoSlide is a light, no dependency and low invasive JS plugin, providing a pattern which switch entire one section at a time. DoSlide can be flexibly configured and has an inner tool library like jQuery, you can implement specific requirements quickly by taking advantage of it.
 
 Take a quick look at [introduction page](http://app.moptym.com/do-slide).
 
