@@ -4,7 +4,7 @@ const SLIDE_THRESHOLD = 50
 
 let util = (selector) => {
     return new util.prototype.Init(selector)
-};
+}
 
 util.prototype = {
 

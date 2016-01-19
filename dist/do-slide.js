@@ -224,6 +224,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return new DoSlide(selector, _extends({}, doSlide.config, config));
 	};
 
+	// install a plugin
+	// the plugin should provide an 'install' function
+	// which will be called with the DoSlide as the first argument,
+	// along with possible config
+	DoSlide.use = function (plugin, config) {
+	    if (plugin && plugin.install) {
+	        plugin.install(DoSlide, config);
+	    }
+	};
+
+	// inner tool library
 	DoSlide.$ = _util2.default;
 
 	// supported CSS property name
