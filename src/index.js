@@ -7,7 +7,7 @@
 
 import $ from './util'
 import { init } from './init'
-import { startListen, excuteEventCallbacks } from './event'
+import { startListen, executeEventCallbacks } from './event'
 import { change } from './show'
 
 

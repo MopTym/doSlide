@@ -1,24 +1,24 @@
 import $ from './util'
 
 
-function excuteUserEventCallbacks(doSlide) {
+function executeUserEventCallbacks(doSlide) {
     let event = doSlide.userEvent
     if (event) {
         doSlide.userEvent = null
         let callbacks = doSlide.callbacks[event.name]
-        let ret = excute(callbacks, event.args, doSlide, false)
+        let ret = execute(callbacks, event.args, doSlide, false)
         return ret !== false
     }
     return true
 }
 
-function excuteEventCallbacks(doSlide, event) {
+function executeEventCallbacks(doSlide, event) {
     let callbacks = doSlide.callbacks[event.name]
-    let ret = excute(callbacks, event.args, doSlide, false)
+    let ret = execute(callbacks, event.args, doSlide, false)
     return ret !== false
 }
 
-function excute(callbacks, args, context, breakValue) {
+function execute(callbacks, args, context, breakValue) {
     return $.forEach(
         callbacks,
         (callback) => callback.apply(context, args),
@@ -79,4 +79,4 @@ function listenUserSwipe(doSlide, eventElem) {
 }
 
 
-export { startListen, excuteEventCallbacks, excuteUserEventCallbacks }
+export { startListen, executeEventCallbacks, executeUserEventCallbacks }

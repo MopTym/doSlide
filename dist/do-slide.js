@@ -692,10 +692,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (canChangeNow(doSlide, index)) {
 	        if (isOverRange(doSlide, index)) {
 	            doingOnOverRange(doSlide, index);
-	        } else if ((0, _event.excuteUserEventCallbacks)(doSlide)) {
+	        } else if ((0, _event.executeUserEventCallbacks)(doSlide)) {
 	            (function () {
 	                var lastIndex = doSlide.currentIndex;
-	                var isOK = (0, _event.excuteEventCallbacks)(doSlide, {
+	                var isOK = (0, _event.executeEventCallbacks)(doSlide, {
 	                    name: 'onBeforeChange',
 	                    args: [lastIndex, index, doSlide.currentSection, doSlide.sections[index]]
 	                });
@@ -704,7 +704,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    doSlide.currentIndex = index;
 	                    doSlide.currentSection = doSlide.sections[index];
 	                    setTimeout(function () {
-	                        (0, _event.excuteEventCallbacks)(doSlide, {
+	                        (0, _event.executeEventCallbacks)(doSlide, {
 	                            name: 'onChanged',
 	                            args: [index, lastIndex, doSlide.currentSection, doSlide.sections[lastIndex]]
 	                        });
@@ -725,7 +725,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function doingOnOverRange(doSlide, index) {
 	    var parent = doSlide.config.parent;
-	    var isOK = (0, _event.excuteEventCallbacks)(doSlide, {
+	    var isOK = (0, _event.executeEventCallbacks)(doSlide, {
 	        name: 'onOverRange',
 	        args: [doSlide.currentIndex, index, doSlide.currentSection]
 	    });
@@ -767,7 +767,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.excuteUserEventCallbacks = exports.excuteEventCallbacks = exports.startListen = undefined;
+	exports.executeUserEventCallbacks = exports.executeEventCallbacks = exports.startListen = undefined;
 
 	var _util = __webpack_require__(1);
 
@@ -775,24 +775,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function excuteUserEventCallbacks(doSlide) {
+	function executeUserEventCallbacks(doSlide) {
 	    var event = doSlide.userEvent;
 	    if (event) {
 	        doSlide.userEvent = null;
 	        var callbacks = doSlide.callbacks[event.name];
-	        var ret = excute(callbacks, event.args, doSlide, false);
+	        var ret = execute(callbacks, event.args, doSlide, false);
 	        return ret !== false;
 	    }
 	    return true;
 	}
 
-	function excuteEventCallbacks(doSlide, event) {
+	function executeEventCallbacks(doSlide, event) {
 	    var callbacks = doSlide.callbacks[event.name];
-	    var ret = excute(callbacks, event.args, doSlide, false);
+	    var ret = execute(callbacks, event.args, doSlide, false);
 	    return ret !== false;
 	}
 
-	function excute(callbacks, args, context, breakValue) {
+	function execute(callbacks, args, context, breakValue) {
 	    return _util2.default.forEach(callbacks, function (callback) {
 	        return callback.apply(context, args);
 	    }, null, breakValue);
@@ -854,8 +854,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	exports.startListen = startListen;
-	exports.excuteEventCallbacks = excuteEventCallbacks;
-	exports.excuteUserEventCallbacks = excuteUserEventCallbacks;
+	exports.executeEventCallbacks = executeEventCallbacks;
+	exports.executeUserEventCallbacks = executeUserEventCallbacks;
 
 /***/ }
 /******/ ])
