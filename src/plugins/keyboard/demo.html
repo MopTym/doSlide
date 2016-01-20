@@ -5,9 +5,9 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="renderer" content="webkit">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-        <title>Invert mouse wheel</title>
-        <link rel="stylesheet" href="../dist/do-slide.min.css">
-        <link rel="stylesheet" href="css/common.css">
+        <title>Keyboard</title>
+        <link rel="stylesheet" href="../../../dist/do-slide.min.css">
+        <link rel="stylesheet" href="../../../demo/css/common.css">
     </head>
     <body>
         <div class="wrap ds-parent">
@@ -28,22 +28,21 @@
                 </div>
             </div>
         </div>
-        <script type="text/javascript" src="../dist/do-slide.min.js"></script>
+        <script type="text/javascript" src="../../../dist/do-slide.min.js"></script>
         <script type="text/javascript">
 
-            var slide = new DoSlide('.container', {
-                listenUserMouseWheel: false
-            })
+            var slide = new DoSlide('.container')
+            /* turn on keyboard surpport */
+            slide.getKeyboard().turnOn()
 
-            DoSlide.$.onMouseWheel(slide.eventEl, function(direction) {
-                if (!slide.isChanging) {
-                    if (direction === 'up') {
-                        slide.next()
-                    } else {
-                        slide.prev()
-                    }
+            /* add mapping: press space key to switch to next */
+            var keyboard = slide.getKeyboard()
+            keyboard.setMappings(keyboard.getMappings().concat([
+                {
+                    filter: function(event) { return event.keyCode === 32 },
+                    action: function(event) { this.next() }
                 }
-            })
+            ]))
 
         </script>
     </body>

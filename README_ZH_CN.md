@@ -23,6 +23,7 @@
 - [方法](#方法)
 - [回调](#回调)
 - [内置工具库](#内置工具库)
+- [插件](#插件)
 - [低侵入性](#低侵入性)
 - [兼容性](#兼容性)
 - [一些问题](#一些问题)
@@ -466,13 +467,13 @@ DoSlide本身属性：
 
 #### onUserMouseWheel(callback(direction))
 
-- `direction`：向下滚时`direction.down = true`，向上滚时`direction.up = true`
+- `direction`：字符串`up`、`down`对应滚动方向
 
 在由用户鼠标滚轮事件触发的切换发生前，以当前DoSlide对象作为上下文（`this`）执行`callback`。
 
 #### onUserSwipe(callback(direction))
 
-- `direction`：方向对象，其属性`up`、`down`、`left`、`right`代表滑动方向
+- `direction`：字符串`up`、`down`、`left`、`right`代表滑动方向
 
 在由用户触屏滑动事件触发的切换发生前，以当前DoSlide对象作为上下文（`this`）执行`callback`。
 
@@ -556,14 +557,14 @@ DoSlide内置了一个类似于jQuery的工具库，可以通过`DoSlide.$`或Do
 
 #### onMouseWheel(HTMLElement, callback(direction)[, isStopPropFn() => false])
 
-- `direction`：方向对象，其属性`up`、`down`对应滚动方向
+- `direction`：字符串`up`、`down`对应滚动方向
 - `isStopPropFn`：返回`true`或`false`，是否阻止事件冒泡
 
 监听`HTMLElement`对象上的鼠标滚动，触发时以当前`HTMLElement`对象作为上下文（`this`）执行`callback`。
 
 #### onSwipe(HTMLElement, callback(direction)[, isStopPropFn() => false])
 
-- `direction`：方向对象，其属性`up`、`down`、`left`、`right`对应滑动方向
+- `direction`：字符串`up`、`down`、`left`、`right`对应滑动方向
 - `isStopPropFn`：返回`true`或`false`，是否阻止事件冒泡
 
 监听`HTMLElement`对象上的触屏滑动，触发时以当前`HTMLElement`对象作为上下文（`this`）执行`callback`。
@@ -588,6 +589,13 @@ DoSlide.$.onMouseWheel(document.body, function(direction) {
     console.log(direction.up? 'up': 'down')
 })
 ```
+
+<br>
+
+
+## 插件
+
+DoSlide有一些内置插件，当然你也可以自己编写，请看 [src/plugins](src/plugins) 。
 
 <br>
 

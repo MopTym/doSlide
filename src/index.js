@@ -9,6 +9,7 @@ import $ from './util'
 import { init } from './init'
 import { startListen, executeEventCallbacks } from './event'
 import { change } from './show'
+import keyboard from './plugins/keyboard'
 
 
 const DEFAULT_INIT_CONFIG = {
@@ -146,6 +147,9 @@ DoSlide.use = (plugin, config) => {
         plugin.install(DoSlide, config)
     }
 }
+
+// install build-in plugins
+DoSlide.use(keyboard)
 
 // inner tool library
 DoSlide.$ = $

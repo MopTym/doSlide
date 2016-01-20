@@ -1,6 +1,6 @@
 {
   "name": "do-slide",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Fullpage scroll / Section scroll / Slider / No dependency",
   "main": "dist/do-slide.js",
   "scripts": {
@@ -27,12 +27,10 @@
   },
   "homepage": "https://github.com/MopTym/doSlide",
   "devDependencies": {
-    "babel": "^6.3.13",
-    "babel-core": "^6.3.13",
-    "babel-loader": "^6.2.0",
+    "babel": "^6.3.26",
+    "babel-loader": "^6.2.1",
     "babel-plugin-transform-object-assign": "^6.3.13",
     "babel-preset-es2015": "^6.3.13",
-    "base64-loader": "^1.0.0",
     "chai": "^2.2.0",
     "gulp": "^3.9.0",
     "gulp-rename": "^1.2.2",
