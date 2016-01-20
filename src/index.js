@@ -7,8 +7,9 @@
 
 import $ from './util'
 import { init } from './init'
-import { startListen, excuteEventCallbacks } from './event'
+import { startListen, executeEventCallbacks } from './event'
 import { change } from './show'
+import keyboard from './plugins/keyboard'
 
 
 const DEFAULT_INIT_CONFIG = {
@@ -137,6 +138,20 @@ DoSlide.from = (doSlide, selector, config) => {
     return new DoSlide(selector, Object.assign({}, doSlide.config, config))
 }
 
+// install a plugin
+// the plugin should provide an 'install' function
+// which will be called with the DoSlide as the first argument,
+// along with possible config
+DoSlide.use = (plugin, config) => {
+    if (plugin && plugin.install) {
+        plugin.install(DoSlide, config)
+    }
+}
+
+// install build-in plugins
+DoSlide.use(keyboard)
+
+// inner tool library
 DoSlide.$ = $
 
 // supported CSS property name

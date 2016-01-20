@@ -192,16 +192,13 @@
 
 	'use strict';
 
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 	var MAX_TOUCH_TIME = 800;
 	var SLIDE_THRESHOLD = 50;
 
@@ -380,7 +377,7 @@
 	     * get supported CSS property name
 	     * example: if the browser only support '-webkit-transform', getSupportedCSS('transfrom') => '-webkit-transform'
 	     */
-	    getSupportedCSS: (function () {
+	    getSupportedCSS: function () {
 	        var prefixes = ['', '-webkit-', '-moz-', '-o-', '-ms-'];
 	        var elem = document.createElement('div');
 	        var style = elem.style;
@@ -397,7 +394,7 @@
 	            });
 	            return supportedName;
 	        };
-	    })(),
+	    }(),
 
 	    onMouseWheel: function onMouseWheel(elem, callback) {
 	        var isStopPropFn = arguments.length <= 2 || arguments[2] === undefined ? function () {
@@ -410,7 +407,7 @@
 	                event.preventDefault();
 	                if (isStopPropFn()) event.stopPropagation();
 	                var delta = event.detail ? event.detail * -120 : event.wheelDelta;
-	                var direction = _defineProperty({}, delta < 0 ? 'down' : 'up', true);
+	                var direction = delta < 0 ? 'down' : 'up';
 	                callback.call(elem, direction);
 	            }, false);
 	        });
@@ -454,9 +451,9 @@
 	                var direction = {};
 	                if (Math.max(absDiffX, absDiffY) > SLIDE_THRESHOLD) {
 	                    if (absDiffX > absDiffY) {
-	                        direction[diffX > 0 ? 'right' : 'left'] = true;
+	                        direction = diffX > 0 ? 'right' : 'left';
 	                    } else {
-	                        direction[diffY > 0 ? 'down' : 'up'] = true;
+	                        direction = diffY > 0 ? 'down' : 'up';
 	                    }
 	                    callback.call(elem, direction);
 	                }

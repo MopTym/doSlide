@@ -1,5 +1,5 @@
 import $ from './util'
-import { excuteEventCallbacks, excuteUserEventCallbacks } from './event'
+import { executeEventCallbacks, executeUserEventCallbacks } from './event'
 
 
 const supportedTransition = $.getSupportedCSS('transition')
@@ -81,9 +81,9 @@ function change(doSlide, index) {
     if (canChangeNow(doSlide, index)) {
         if (isOverRange(doSlide, index)) {
             doingOnOverRange(doSlide, index)
-        } else if (excuteUserEventCallbacks(doSlide)) {
+        } else if (executeUserEventCallbacks(doSlide)) {
             let lastIndex = doSlide.currentIndex
-            let isOK = excuteEventCallbacks(doSlide, {
+            let isOK = executeEventCallbacks(doSlide, {
                 name: 'onBeforeChange',
                 args: [lastIndex, index, doSlide.currentSection, doSlide.sections[index]]
             })
@@ -92,7 +92,7 @@ function change(doSlide, index) {
                 doSlide.currentIndex = index
                 doSlide.currentSection = doSlide.sections[index]
                 setTimeout(() => {
-                    excuteEventCallbacks(doSlide, {
+                    executeEventCallbacks(doSlide, {
                         name: 'onChanged',
                         args: [index, lastIndex, doSlide.currentSection, doSlide.sections[lastIndex]]
                     })
@@ -112,7 +112,7 @@ function isOverRange(doSlide, index) {
 
 function doingOnOverRange(doSlide, index) {
     let parent = doSlide.config.parent
-    let isOK = excuteEventCallbacks(doSlide, {
+    let isOK = executeEventCallbacks(doSlide, {
         name: 'onOverRange',
         args: [doSlide.currentIndex, index, doSlide.currentSection]
     })

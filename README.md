@@ -23,6 +23,7 @@ Fullpage scroll / Section scroll / Slider / No denpendency / Gzipped size < 5KB
 - [Functions](#functions)
 - [Callbacks](#callbacks)
 - [Inner tool library](#inner-tool-library)
+- [Plugins](#plugins)
 - [Low invasive](#low-invasive)
 - [Compatibility](#compatibility)
 - [FAQ](#faq)
@@ -393,7 +394,7 @@ Properties of DoSlide object (instance):
 | --- | :---: | --- |
 | el | yes | Corresponding element. |
 | eventEl | yes | Event element. |
-| sections | yes | collection of sections |
+| sections | yes | Collection of sections |
 | currentIndex | yes | Index of current section. |
 | currentSection | yes | Current section. |
 | isChanging | yes | Is switching sections now. |
@@ -472,13 +473,13 @@ When try to switch to overrange section, excute `callback` with current DoSlide 
 
 #### onUserMouseWheel(callback(direction))
 
-- `direction`: its properties `up` and `down` represent scroll direction
+- `direction`: string `up` or `down` represent scroll direction
 
 Before switching which caused by mouse wheel event occurs, excute `callback` with current DoSlide object as context object (`this`) .
 
 #### onUserSwipe(callback(direction))
 
-- `direction`: its properties `up`, `down`, `left` and `right` represent swipe direction
+- `direction`: string `up`, `down`, `left` or `right` represent swipe direction
 
 Before switching which caused by swipe event occurs, excute `callback` with current DoSlide object as context object (`this`) .
 
@@ -562,14 +563,14 @@ Get supported CSS property name. For example, the browser only supports `-webkit
 
 #### onMouseWheel(HTMLElement, callback(direction)[, isStopPropFn() => false])
 
-- `direction`: its properties `up` and `down` represent scroll direction
+- `direction`: string `up` or `down` represent scroll direction
 - `isStopPropFn`: a function return `true` or `false`, defines whether to stop event propagation or not
 
 Listen user mouse wheel event, excute `callback` with `HTMLElement` as context object (`this`) when triggered.
 
 #### onSwipe(HTMLElement, callback(direction)[, isStopPropFn() => false])
 
-- `direction`: its properties `up`, `down`, `left` and `right` represent swipe direction
+- `direction`: string `up`, `down`, `left` or `right` represent swipe direction
 - `isStopPropFn`: a function return `true` or `false`, defines whether to stop event propagation or not
 
 Listen user touch swipe event, excute `callback` with `HTMLElement` as context object (`this`) when triggered.
@@ -593,9 +594,16 @@ DoSlide.$('.foo')
 ```
 ```js
 DoSlide.$.onMouseWheel(document.body, function(direction) {
-    console.log(direction.up? 'up': 'down')
+    console.log(direction)
 })
 ```
+
+<br>
+
+
+## Plugins
+
+See [src/plugins](src/plugins) .
 
 <br>
 

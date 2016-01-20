@@ -1,5 +1,5 @@
 /*!
- * DoSlide v1.0.1
+ * DoSlide v1.1.0
  * (c) 2016 MopTym <moptym@163.com>
  * Released under the MIT License.
  * Homepage - https://github.com/MopTym/doSlide
@@ -64,12 +64,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); /*
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * DoSlide
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        *
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        * MopTym <moptym@163.com>
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        *
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        */
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * DoSlide
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * MopTym <moptym@163.com>
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
 	var _util = __webpack_require__(1);
 
@@ -80,6 +80,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _event = __webpack_require__(4);
 
 	var _show = __webpack_require__(3);
+
+	var _keyboard = __webpack_require__(5);
+
+	var _keyboard2 = _interopRequireDefault(_keyboard);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -116,7 +120,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    stopPropagation: false
 	};
 
-	var DoSlide = (function () {
+	var DoSlide = function () {
 	    function DoSlide() {
 	        var selector = arguments.length <= 0 || arguments[0] === undefined ? document.createElement('div') : arguments[0];
 	        var config = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -218,12 +222,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }]);
 
 	    return DoSlide;
-	})();
+	}();
 
 	DoSlide.from = function (doSlide, selector, config) {
 	    return new DoSlide(selector, _extends({}, doSlide.config, config));
 	};
 
+	// install a plugin
+	// the plugin should provide an 'install' function
+	// which will be called with the DoSlide as the first argument,
+	// along with possible config
+	DoSlide.use = function (plugin, config) {
+	    if (plugin && plugin.install) {
+	        plugin.install(DoSlide, config);
+	    }
+	};
+
+	// install build-in plugins
+	DoSlide.use(_keyboard2.default);
+
+	// inner tool library
 	DoSlide.$ = _util2.default;
 
 	// supported CSS property name
@@ -242,16 +260,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 	var MAX_TOUCH_TIME = 800;
 	var SLIDE_THRESHOLD = 50;
 
@@ -430,7 +445,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * get supported CSS property name
 	     * example: if the browser only support '-webkit-transform', getSupportedCSS('transfrom') => '-webkit-transform'
 	     */
-	    getSupportedCSS: (function () {
+	    getSupportedCSS: function () {
 	        var prefixes = ['', '-webkit-', '-moz-', '-o-', '-ms-'];
 	        var elem = document.createElement('div');
 	        var style = elem.style;
@@ -447,7 +462,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            });
 	            return supportedName;
 	        };
-	    })(),
+	    }(),
 
 	    onMouseWheel: function onMouseWheel(elem, callback) {
 	        var isStopPropFn = arguments.length <= 2 || arguments[2] === undefined ? function () {
@@ -460,7 +475,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                event.preventDefault();
 	                if (isStopPropFn()) event.stopPropagation();
 	                var delta = event.detail ? event.detail * -120 : event.wheelDelta;
-	                var direction = _defineProperty({}, delta < 0 ? 'down' : 'up', true);
+	                var direction = delta < 0 ? 'down' : 'up';
 	                callback.call(elem, direction);
 	            }, false);
 	        });
@@ -504,9 +519,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var direction = {};
 	                if (Math.max(absDiffX, absDiffY) > SLIDE_THRESHOLD) {
 	                    if (absDiffX > absDiffY) {
-	                        direction[diffX > 0 ? 'right' : 'left'] = true;
+	                        direction = diffX > 0 ? 'right' : 'left';
 	                    } else {
-	                        direction[diffY > 0 ? 'down' : 'up'] = true;
+	                        direction = diffY > 0 ? 'down' : 'up';
 	                    }
 	                    callback.call(elem, direction);
 	                }
@@ -617,7 +632,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var supportedTransition = _util2.default.getSupportedCSS('transition');
 	var supportedTransform = _util2.default.getSupportedCSS('transform');
 
-	var isSupport3d = (function () {
+	var isSupport3d = function () {
 	    var has3d = false;
 	    if (supportedTransform && window.getComputedStyle) {
 	        var el = document.createElement('div');
@@ -627,7 +642,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        document.body.removeChild(el);
 	    }
 	    return has3d && has3d !== 'none';
-	})();
+	}();
 
 	function initSections(doSlide, initIndex) {
 	    var $container = (0, _util2.default)(doSlide.el);
@@ -692,10 +707,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (canChangeNow(doSlide, index)) {
 	        if (isOverRange(doSlide, index)) {
 	            doingOnOverRange(doSlide, index);
-	        } else if ((0, _event.excuteUserEventCallbacks)(doSlide)) {
+	        } else if ((0, _event.executeUserEventCallbacks)(doSlide)) {
 	            (function () {
 	                var lastIndex = doSlide.currentIndex;
-	                var isOK = (0, _event.excuteEventCallbacks)(doSlide, {
+	                var isOK = (0, _event.executeEventCallbacks)(doSlide, {
 	                    name: 'onBeforeChange',
 	                    args: [lastIndex, index, doSlide.currentSection, doSlide.sections[index]]
 	                });
@@ -704,7 +719,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    doSlide.currentIndex = index;
 	                    doSlide.currentSection = doSlide.sections[index];
 	                    setTimeout(function () {
-	                        (0, _event.excuteEventCallbacks)(doSlide, {
+	                        (0, _event.executeEventCallbacks)(doSlide, {
 	                            name: 'onChanged',
 	                            args: [index, lastIndex, doSlide.currentSection, doSlide.sections[lastIndex]]
 	                        });
@@ -725,7 +740,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function doingOnOverRange(doSlide, index) {
 	    var parent = doSlide.config.parent;
-	    var isOK = (0, _event.excuteEventCallbacks)(doSlide, {
+	    var isOK = (0, _event.executeEventCallbacks)(doSlide, {
 	        name: 'onOverRange',
 	        args: [doSlide.currentIndex, index, doSlide.currentSection]
 	    });
@@ -767,7 +782,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.excuteUserEventCallbacks = exports.excuteEventCallbacks = exports.startListen = undefined;
+	exports.executeUserEventCallbacks = exports.executeEventCallbacks = exports.startListen = undefined;
 
 	var _util = __webpack_require__(1);
 
@@ -775,24 +790,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function excuteUserEventCallbacks(doSlide) {
+	function executeUserEventCallbacks(doSlide) {
 	    var event = doSlide.userEvent;
 	    if (event) {
 	        doSlide.userEvent = null;
 	        var callbacks = doSlide.callbacks[event.name];
-	        var ret = excute(callbacks, event.args, doSlide, false);
+	        var ret = execute(callbacks, event.args, doSlide, false);
 	        return ret !== false;
 	    }
 	    return true;
 	}
 
-	function excuteEventCallbacks(doSlide, event) {
+	function executeEventCallbacks(doSlide, event) {
 	    var callbacks = doSlide.callbacks[event.name];
-	    var ret = excute(callbacks, event.args, doSlide, false);
+	    var ret = execute(callbacks, event.args, doSlide, false);
 	    return ret !== false;
 	}
 
-	function excute(callbacks, args, context, breakValue) {
+	function execute(callbacks, args, context, breakValue) {
 	    return _util2.default.forEach(callbacks, function (callback) {
 	        return callback.apply(context, args);
 	    }, null, breakValue);
@@ -824,7 +839,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            name: 'onUserMouseWheel',
 	            args: [direction]
 	        };
-	        if (direction.down) {
+	        if (direction === 'down') {
 	            doSlide.next();
 	        } else {
 	            doSlide.prev();
@@ -842,11 +857,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            args: [direction]
 	        };
 	        if (doSlide.config.horizontal) {
-	            if (direction.left) doSlide.next();
-	            if (direction.right) doSlide.prev();
+	            if (direction === 'left') doSlide.next();
+	            if (direction === 'right') doSlide.prev();
 	        } else {
-	            if (direction.up) doSlide.next();
-	            if (direction.down) doSlide.prev();
+	            if (direction === 'up') doSlide.next();
+	            if (direction === 'down') doSlide.prev();
 	        }
 	    }, function () {
 	        return doSlide.config.stopPropagation;
@@ -854,8 +869,147 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	exports.startListen = startListen;
-	exports.excuteEventCallbacks = excuteEventCallbacks;
-	exports.excuteUserEventCallbacks = excuteUserEventCallbacks;
+	exports.executeEventCallbacks = executeEventCallbacks;
+	exports.executeUserEventCallbacks = executeUserEventCallbacks;
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	// the final file size is too big to use Symbol.
+	// const KEY = Symbol('keyboard')
+	var KEY = 'plugin.keyboard' + Date.now();
+
+	var Keyboard = function () {
+	    function Keyboard(doSlide) {
+	        _classCallCheck(this, Keyboard);
+
+	        this.eventType = 'keydown';
+	        this.eventElement = window;
+	        this.for = doSlide;
+	        this.$ = doSlide.$;
+	        this.isOn = false;
+	        this.listener = listener.bind(this);
+	        this.mappings = [{
+	            filter: filterByKeyCode(40), // down
+	            action: function action() {
+	                if (!this.config.horizontal) this.next();
+	            }
+	        }, {
+	            filter: filterByKeyCode(38), // up
+	            action: function action() {
+	                if (!this.config.horizontal) this.prev();
+	            }
+	        }, {
+	            filter: filterByKeyCode(39), // right
+	            action: function action() {
+	                if (this.config.horizontal) this.next();
+	            }
+	        }, {
+	            filter: filterByKeyCode(37), // left
+	            action: function action() {
+	                if (this.config.horizontal) this.prev();
+	            }
+	        }];
+	    }
+
+	    _createClass(Keyboard, [{
+	        key: 'setEventType',
+	        value: function setEventType(eventType) {
+	            if (eventType !== this.eventType) {
+	                var isOn = this.isOn;
+	                if (isOn) this.turnOff();
+	                this.eventType = eventType;
+	                if (isOn) this.turnOn();
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: 'setEventElement',
+	        value: function setEventElement(elem) {
+	            if (elem !== this.eventElement) {
+	                var isOn = this.isOn;
+	                if (isOn) this.turnOff();
+	                this.eventElement = elem;
+	                if (isOn) this.turnOn();
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: 'getMappings',
+	        value: function getMappings() {
+	            return this.mappings;
+	        }
+	    }, {
+	        key: 'setMappings',
+	        value: function setMappings(mappings) {
+	            this.mappings = mappings;
+	            return this;
+	        }
+	    }, {
+	        key: 'turnOn',
+	        value: function turnOn() {
+	            if (!this.isOn) {
+	                this.$.on(this.eventElement, this.eventType, this.listener, false);
+	                this.isOn = true;
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: 'turnOff',
+	        value: function turnOff() {
+	            if (this.isOn) {
+	                this.$.off(this.eventElement, this.eventType, this.listener, false);
+	                this.isOn = false;
+	            }
+	            return this;
+	        }
+	    }]);
+
+	    return Keyboard;
+	}();
+
+	function filterByKeyCode(keyCode) {
+	    return function (event) {
+	        return event.keyCode === keyCode;
+	    };
+	}
+
+	function listener(event) {
+	    var mappings = this.mappings || [];
+	    var doSlide = this.for;
+	    mappings.forEach(function (mapping) {
+	        if (mapping.filter.call(doSlide, event) === true) {
+	            mapping.action.call(doSlide, event);
+	        }
+	    });
+	}
+
+	function install(DoSlide) {
+	    DoSlide.prototype.getKeyboard = function () {
+	        if (!this[KEY]) {
+	            Object.defineProperty(this, KEY, {
+	                enumerable: false,
+	                configurable: false,
+	                writable: false,
+	                value: new Keyboard(this)
+	            });
+	        }
+	        return this[KEY];
+	    };
+	}
+
+	exports.default = { install: install };
 
 /***/ }
 /******/ ])

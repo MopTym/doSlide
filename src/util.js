@@ -4,7 +4,7 @@ const SLIDE_THRESHOLD = 50
 
 let util = (selector) => {
     return new util.prototype.Init(selector)
-};
+}
 
 util.prototype = {
 
@@ -195,9 +195,7 @@ Object.assign(util, {
                 event.preventDefault()
                 if (isStopPropFn()) event.stopPropagation()
                 let delta = event.detail? event.detail * (-120) : event.wheelDelta
-                let direction = {
-                    [delta < 0? 'down': 'up']: true
-                }
+                let direction = delta < 0? 'down': 'up'
                 callback.call(elem, direction)
             }, false)
         })
@@ -232,9 +230,9 @@ Object.assign(util, {
                 let direction = {}
                 if (Math.max(absDiffX, absDiffY) > SLIDE_THRESHOLD) {
                     if (absDiffX > absDiffY) {
-                        direction[diffX > 0? 'right': 'left'] = true
+                        direction = diffX > 0? 'right': 'left'
                     } else {
-                        direction[diffY > 0? 'down': 'up'] = true
+                        direction = diffY > 0? 'down': 'up'
                     }
                     callback.call(elem, direction)
                 }
