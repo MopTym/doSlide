@@ -261,8 +261,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 	var MAX_TOUCH_TIME = 800;
 	var SLIDE_THRESHOLD = 50;
 
@@ -471,7 +469,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                event.preventDefault();
 	                if (isStopPropFn()) event.stopPropagation();
 	                var delta = event.detail ? event.detail * -120 : event.wheelDelta;
-	                var direction = _defineProperty({}, delta < 0 ? 'down' : 'up', true);
+	                var direction = delta < 0 ? 'down' : 'up';
 	                callback.call(elem, direction);
 	            }, false);
 	        });
@@ -512,12 +510,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    diffY = endY - startY;
 	                var absDiffX = Math.abs(diffX),
 	                    absDiffY = Math.abs(diffY);
-	                var direction = {};
+	                var direction = undefined;
 	                if (Math.max(absDiffX, absDiffY) > SLIDE_THRESHOLD) {
 	                    if (absDiffX > absDiffY) {
-	                        direction[diffX > 0 ? 'right' : 'left'] = true;
+	                        direction = diffX > 0 ? 'right' : 'left';
 	                    } else {
-	                        direction[diffY > 0 ? 'down' : 'up'] = true;
+	                        direction = diffY > 0 ? 'down' : 'up';
 	                    }
 	                    callback.call(elem, direction);
 	                }
@@ -835,7 +833,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            name: 'onUserMouseWheel',
 	            args: [direction]
 	        };
-	        if (direction.down) {
+	        if (direction === 'down') {
 	            doSlide.next();
 	        } else {
 	            doSlide.prev();
@@ -853,11 +851,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            args: [direction]
 	        };
 	        if (doSlide.config.horizontal) {
-	            if (direction.left) doSlide.next();
-	            if (direction.right) doSlide.prev();
+	            if (direction === 'left') doSlide.next();
+	            if (direction === 'right') doSlide.prev();
 	        } else {
-	            if (direction.up) doSlide.next();
-	            if (direction.down) doSlide.prev();
+	            if (direction === 'up') doSlide.next();
+	            if (direction === 'down') doSlide.prev();
 	        }
 	    }, function () {
 	        return doSlide.config.stopPropagation;

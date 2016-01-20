@@ -53,7 +53,7 @@ function listenUserMouseWheel(doSlide, eventElem) {
             name: 'onUserMouseWheel',
             args: [direction]
         }
-        if (direction.down) {
+        if (direction === 'down') {
             doSlide.next()
         } else {
             doSlide.prev()
@@ -69,11 +69,11 @@ function listenUserSwipe(doSlide, eventElem) {
             args: [direction]
         }
         if (doSlide.config.horizontal) {
-            if (direction.left) doSlide.next()
-            if (direction.right) doSlide.prev()
+            if (direction === 'left') doSlide.next()
+            if (direction === 'right') doSlide.prev()
         } else {
-            if (direction.up) doSlide.next()
-            if (direction.down) doSlide.prev()
+            if (direction === 'up') doSlide.next()
+            if (direction === 'down') doSlide.prev()
         }
     }, () => doSlide.config.stopPropagation)
 }

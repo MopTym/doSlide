@@ -200,8 +200,6 @@
 
 	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 	var MAX_TOUCH_TIME = 800;
 	var SLIDE_THRESHOLD = 50;
 
@@ -410,7 +408,7 @@
 	                event.preventDefault();
 	                if (isStopPropFn()) event.stopPropagation();
 	                var delta = event.detail ? event.detail * -120 : event.wheelDelta;
-	                var direction = _defineProperty({}, delta < 0 ? 'down' : 'up', true);
+	                var direction = delta < 0 ? 'down' : 'up';
 	                callback.call(elem, direction);
 	            }, false);
 	        });
@@ -451,12 +449,12 @@
 	                    diffY = endY - startY;
 	                var absDiffX = Math.abs(diffX),
 	                    absDiffY = Math.abs(diffY);
-	                var direction = {};
+	                var direction = undefined;
 	                if (Math.max(absDiffX, absDiffY) > SLIDE_THRESHOLD) {
 	                    if (absDiffX > absDiffY) {
-	                        direction[diffX > 0 ? 'right' : 'left'] = true;
+	                        direction = diffX > 0 ? 'right' : 'left';
 	                    } else {
-	                        direction[diffY > 0 ? 'down' : 'up'] = true;
+	                        direction = diffY > 0 ? 'down' : 'up';
 	                    }
 	                    callback.call(elem, direction);
 	                }
