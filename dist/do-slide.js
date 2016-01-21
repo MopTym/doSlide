@@ -1,5 +1,5 @@
 /*!
- * DoSlide v1.1.0
+ * DoSlide v1.1.1
  * (c) 2016 MopTym <moptym@163.com>
  * Released under the MIT License.
  * Homepage - https://github.com/MopTym/doSlide
@@ -120,6 +120,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    stopPropagation: false
 	};
 
+	var DATA_DESCRIPTOR = {
+	    enumerable: false,
+	    configurable: false,
+	    writable: false,
+	    value: {}
+	};
+
 	var DoSlide = function () {
 	    function DoSlide() {
 	        var selector = arguments.length <= 0 || arguments[0] === undefined ? document.createElement('div') : arguments[0];
@@ -127,6 +134,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _classCallCheck(this, DoSlide);
 
+	        Object.defineProperty(this, '_data', DATA_DESCRIPTOR);
 	        this.$ = _util2.default;
 	        this.callbacks = {
 	            onChanged: [],
@@ -219,6 +227,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.callbacks.onUserSwipe.push(callback);
 	            return this;
 	        }
+	    }, {
+	        key: 'initSpaceByKey',
+	        value: function initSpaceByKey(key) {
+	            Object.defineProperty(this._data, key, {
+	                enumerable: false,
+	                configurable: true,
+	                writable: false,
+	                value: {}
+	            });
+	            return this._data[key];
+	        }
+	    }, {
+	        key: 'getSpaceByKey',
+	        value: function getSpaceByKey(key) {
+	            return this._data[key];
+	        }
 	    }]);
 
 	    return DoSlide;
@@ -226,6 +250,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	DoSlide.from = function (doSlide, selector, config) {
 	    return new DoSlide(selector, _extends({}, doSlide.config, config));
+	};
+
+	DoSlide.applyNewKey = function () {
+	    var key = 'key' + Date.now() + ~ ~(Math.random() * 10000);
+	    return key;
 	};
 
 	// install a plugin
@@ -516,7 +545,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    diffY = endY - startY;
 	                var absDiffX = Math.abs(diffX),
 	                    absDiffY = Math.abs(diffY);
-	                var direction = {};
+	                var direction = undefined;
 	                if (Math.max(absDiffX, absDiffY) > SLIDE_THRESHOLD) {
 	                    if (absDiffX > absDiffY) {
 	                        direction = diffX > 0 ? 'right' : 'left';
@@ -886,12 +915,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	// the final file size is too big to use Symbol.
-	// const KEY = Symbol('keyboard')
-	var KEY = 'plugin.keyboard' + Date.now();
-
 	var Keyboard = function () {
-	    function Keyboard(doSlide) {
+	    function Keyboard(doSlide, key) {
 	        _classCallCheck(this, Keyboard);
 
 	        this.eventType = 'keydown';
@@ -997,16 +1022,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function install(DoSlide) {
 	    DoSlide.prototype.getKeyboard = function () {
-	        if (!this[KEY]) {
-	            Object.defineProperty(this, KEY, {
-	                enumerable: false,
-	                configurable: false,
-	                writable: false,
-	                value: new Keyboard(this)
-	            });
-	        }
-	        return this[KEY];
-	    };
+	        var key = DoSlide.applyNewKey();
+	        return function () {
+	            var space = this.getSpaceByKey(key);
+	            if (!space) {
+	                space = this.initSpaceByKey(key);
+	                space.res = new Keyboard(this, key);
+	            }
+	            return space.res;
+	        };
+	    }();
 	}
 
 	exports.default = { install: install };

@@ -126,6 +126,9 @@ body {
     height: 100%;
 }
 ```
+```js
+var slide = new DoSlide('.ds-container')
+```
 
 <br>
 
@@ -407,6 +410,8 @@ DoSlide本身属性：
 
 ## 方法
 
+### DoSlide对象方法：
+
 #### next()
 
 切换到下一个section。
@@ -433,6 +438,24 @@ DoSlide本身属性：
 - `cur`：当前section
 
 以当前DoSlide对象作为上下文（`this`）执行`callback`。
+
+#### initSpaceByKey(key)
+
+通过`key`初始化一个绑定在当前DoSlide对象上的空间，实际上是个对象，`key`由`applyNewKey`获得。
+
+#### getSpaceByKey(key)
+
+通过`key`获取一个绑定在当前DoSlide对象上的空间。
+
+### DoSlide本身方法：
+
+#### applyNewKey()
+
+申请一个全局唯一的`key`值，用于`getSpaceByKey`。
+
+#### use(plugin[, config])
+
+安装插件，其会调用`plugin.install(DoSlide, config)`，所以插件应该提供一个`install`方法，第一个参数接收DoSlide，第二个参数是配置，由插件决定。
 
 <br>
 

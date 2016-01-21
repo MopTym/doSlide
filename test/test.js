@@ -448,7 +448,7 @@
 	                    diffY = endY - startY;
 	                var absDiffX = Math.abs(diffX),
 	                    absDiffY = Math.abs(diffY);
-	                var direction = {};
+	                var direction = undefined;
 	                if (Math.max(absDiffX, absDiffY) > SLIDE_THRESHOLD) {
 	                    if (absDiffX > absDiffY) {
 	                        direction = diffX > 0 ? 'right' : 'left';

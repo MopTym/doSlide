@@ -43,10 +43,17 @@ const DEFAULT_CONFIG = {
     stopPropagation      : false
 }
 
+const DATA_DESCRIPTOR = {
+    enumerable: false,
+    configurable: false,
+    writable: false,
+    value: {}
+}
 
 class DoSlide {
 
     constructor(selector = document.createElement('div'), config = {}) {
+        Object.defineProperty(this, '_data', DATA_DESCRIPTOR)
         this.$ = $
         this.callbacks = {
             onChanged: [],
@@ -132,10 +139,29 @@ class DoSlide {
         return this
     }
 
+    initSpaceByKey(key) {
+        Object.defineProperty(this._data, key, {
+            enumerable: false,
+            configurable: true,
+            writable: false,
+            value: {}
+        })
+        return this._data[key]
+    }
+
+    getSpaceByKey(key) {
+        return this._data[key]
+    }
+
 }
 
 DoSlide.from = (doSlide, selector, config) => {
     return new DoSlide(selector, Object.assign({}, doSlide.config, config))
+}
+
+DoSlide.applyNewKey = () => {
+    let key = 'key' + Date.now() + ~~(Math.random() * 10000)
+    return key
 }
 
 // install a plugin
