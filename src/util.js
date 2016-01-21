@@ -227,7 +227,7 @@ Object.assign(util, {
             if (Date.now() - startTime < MAX_TOUCH_TIME) {
                 let diffX = endX - startX, diffY = endY - startY
                 let absDiffX = Math.abs(diffX), absDiffY = Math.abs(diffY)
-                let direction = {}
+                let direction
                 if (Math.max(absDiffX, absDiffY) > SLIDE_THRESHOLD) {
                     if (absDiffX > absDiffY) {
                         direction = diffX > 0? 'right': 'left'

@@ -127,6 +127,9 @@ body {
     height: 100%;
 }
 ```
+```js
+var slide = new DoSlide('.ds-container')
+```
 
 <br>
 
