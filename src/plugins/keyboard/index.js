@@ -1,9 +1,5 @@
-// the final file size is too big to use Symbol.
-// const KEY = Symbol('keyboard')
-const KEY = 'plugin.keyboard' + Date.now()
-
 class Keyboard {
-    constructor(doSlide) {
+    constructor(doSlide, key) {
         this.eventType = 'keydown'
         this.eventElement = window
         this.for = doSlide
@@ -85,17 +81,17 @@ function listener(event) {
 }
 
 function install(DoSlide) {
-    DoSlide.prototype.getKeyboard = function() {
-        if (!this[KEY]) {
-            Object.defineProperty(this, KEY, {
-                enumerable: false,
-                configurable: false,
-                writable: false,
-                value: new Keyboard(this)
-            })
+    DoSlide.prototype.getKeyboard = (function() {
+        const key = DoSlide.applyNewKey()
+        return function() {
+            let space = this.getSpaceByKey(key)
+            if (!space) {
+                space = this.initSpaceByKey(key)
+                space.res = new Keyboard(this, key)
+            }
+            return space.res
         }
-        return this[KEY]
-    }
+    })()
 }
 
 
