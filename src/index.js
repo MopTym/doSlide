@@ -5,50 +5,13 @@
  *
  */
 
+import { DEFAULT_INIT_CONFIG, DEFAULT_CONFIG, DATA_DESCRIPTOR } from './config.js'
 import $ from './util'
 import { init } from './init'
 import { startListen, executeEventCallbacks } from './event'
 import { change } from './show'
 import keyboard from './plugins/keyboard'
 
-
-const DEFAULT_INIT_CONFIG = {
-    initIndex            : 0,
-    initClass            : 'ds-init',
-
-    activeClass          : 'active',
-    transitionInClass    : 'transition-in',
-    transitionOutClass   : 'transition-out',
-
-    silent               : false,
-
-    horizontal           : false,
-    infinite             : false,
-
-    listenUserMouseWheel : true,
-    listenUserSwipe      : true,
-    eventElemSelector    : null
-}
-
-const DEFAULT_CONFIG = {
-    duration             : 1000,
-    timingFunction       : 'ease',
-    minInterval          : 50,
-
-    translate3d          : true,
-
-    parent               : null,
-
-    respondToUserEvent   : true,
-    stopPropagation      : false
-}
-
-const DATA_DESCRIPTOR = {
-    enumerable: false,
-    configurable: false,
-    writable: false,
-    value: {}
-}
 
 class DoSlide {
 
