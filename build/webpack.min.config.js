@@ -30,7 +30,10 @@ module.exports = {
         ]
     },
     plugins: [
-        new webpack.BannerPlugin(banner)
+        new webpack.BannerPlugin(banner),
+        new webpack.optimize.UglifyJsPlugin({
+            compress: { warnings: false }
+        })
     ],
     devtool: 'source-map'
 }
