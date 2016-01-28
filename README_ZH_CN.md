@@ -717,7 +717,7 @@ DoSlide 可以运行在所有支持 ES5 的现代浏览器上。
 开发在 `dev` 分支进行，请将代码提交至 `dev` 分支。
 
 - 开发：webpack + babel
-- 测试：mocha-phantomjs + chai
+- 测试：karma + jasmine + phantomjs
 - 持续集成：Travis CI
 
 ```shell

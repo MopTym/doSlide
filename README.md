@@ -726,7 +726,7 @@ About initialization.
 Development is in the `dev` branch, please push new changes to `dev` branch.
 
 - **Development:** webpack + babel
-- **Test:** mocha-phantomjs + chai
+- **Test:** karma + jasmine + phantomjs
 - **Continuous integration:** Travis CI
 
 ```shell
