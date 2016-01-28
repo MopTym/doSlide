@@ -215,7 +215,7 @@ There can be several DoSlide objects in a page, you can use `DoSlide.from()` to 
 
 ## Configuration
 
-In DoSlide's source code ([index.js](src/index.js)) , configurations look like this:
+In DoSlide's source code ([config.js](src/config.js)) , configurations look like this:
 ```js
 const DEFAULT_INIT_CONFIG = {
     initIndex            : 0,
@@ -225,7 +225,7 @@ const DEFAULT_INIT_CONFIG = {
     transitionInClass    : 'transition-in',
     transitionOutClass   : 'transition-out',
 
-    silent               : false,
+    silent               : 0,
 
     horizontal           : false,
     infinite             : false,
@@ -248,6 +248,7 @@ const DEFAULT_CONFIG = {
     stopPropagation      : false
 }
 ```
+In [index.js](src/index.js) :
 ```js
 // in constructor
 this.config = Object.assign({}, DEFAULT_CONFIG, DEFAULT_INIT_CONFIG)
@@ -306,8 +307,8 @@ A more detailed explanation of the configurations follows below:
         </tr>
         <tr>
             <td>silent</td>
-            <td>false</td>
-            <td>If set to <code>true</code>, the actions of DoSlide object will be pure logic with no affect to HTML.</td>
+            <td>0</td>
+            <td><code>0</code>, the actions of DoSlide object will be pure logic with no affect to HTML.</td>
         </tr>
         <tr>
             <td>horizontal</td>
@@ -443,7 +444,7 @@ Get configuration value.
 - `curIndex`: index of current section
 - `cur`: current section
 
-Excute `callback` with current DoSlide object as context object (`this`) .
+Execute `callback` with current DoSlide object as context object (`this`) .
 
 #### initSpaceByKey(key)
 
@@ -475,7 +476,7 @@ Install a plugin. It will call `plugin.install(DoSlide, config)` , so the `plugi
 - `cur`: current section
 - `tar`: target section
 
-Before switching occurs, excute `callback` with current DoSlide object as context object (`this`) .
+Before switching occurs, execute `callback` with current DoSlide object as context object (`this`) .
 
 #### onChanged(callback(curIndex, lastIndex, cur, last))
 
@@ -484,7 +485,7 @@ Before switching occurs, excute `callback` with current DoSlide object as contex
 - `cur`: current section
 - `last`: last section
 
-After switching, excute `callback` with current DoSlide object as context object (`this`) .
+After switching, execute `callback` with current DoSlide object as context object (`this`) .
 
 #### onOverRange(callback(curIndex, tarIndex, cur))
 
@@ -492,19 +493,19 @@ After switching, excute `callback` with current DoSlide object as context object
 - `tarIndex`: index of target section
 - `cur`: current section
 
-When try to switch to overrange section, excute `callback` with current DoSlide object as context object (`this`) .
+When try to switch to overrange section, execute `callback` with current DoSlide object as context object (`this`) .
 
 #### onUserMouseWheel(callback(direction))
 
 - `direction`: string `up` or `down` represent scroll direction
 
-Before switching which caused by mouse wheel event occurs, excute `callback` with current DoSlide object as context object (`this`) .
+Before switching which caused by mouse wheel event occurs, execute `callback` with current DoSlide object as context object (`this`) .
 
 #### onUserSwipe(callback(direction))
 
 - `direction`: string `up`, `down`, `left` or `right` represent swipe direction
 
-Before switching which caused by swipe event occurs, excute `callback` with current DoSlide object as context object (`this`) .
+Before switching which caused by swipe event occurs, execute `callback` with current DoSlide object as context object (`this`) .
 
 <br>
 
@@ -589,14 +590,14 @@ Get supported CSS property name. For example, the browser only supports `-webkit
 - `direction`: string `up` or `down` represent scroll direction
 - `isStopPropFn`: a function return `true` or `false`, defines whether to stop event propagation or not
 
-Listen user mouse wheel event, excute `callback` with `HTMLElement` as context object (`this`) when triggered.
+Listen user mouse wheel event, execute `callback` with `HTMLElement` as context object (`this`) when triggered.
 
 #### onSwipe(HTMLElement, callback(direction)[, isStopPropFn() => false])
 
 - `direction`: string `up`, `down`, `left` or `right` represent swipe direction
 - `isStopPropFn`: a function return `true` or `false`, defines whether to stop event propagation or not
 
-Listen user touch swipe event, excute `callback` with `HTMLElement` as context object (`this`) when triggered.
+Listen user touch swipe event, execute `callback` with `HTMLElement` as context object (`this`) when triggered.
 
 <br>
 

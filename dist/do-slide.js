@@ -71,61 +71,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
-	var _util = __webpack_require__(1);
+	var _config = __webpack_require__(1);
+
+	var _util = __webpack_require__(2);
 
 	var _util2 = _interopRequireDefault(_util);
 
-	var _init = __webpack_require__(2);
+	var _init = __webpack_require__(3);
 
-	var _event = __webpack_require__(4);
+	var _event = __webpack_require__(5);
 
-	var _show = __webpack_require__(3);
+	var _show = __webpack_require__(4);
 
-	var _keyboard = __webpack_require__(5);
+	var _keyboard = __webpack_require__(6);
 
 	var _keyboard2 = _interopRequireDefault(_keyboard);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var DEFAULT_INIT_CONFIG = {
-	    initIndex: 0,
-	    initClass: 'ds-init',
-
-	    activeClass: 'active',
-	    transitionInClass: 'transition-in',
-	    transitionOutClass: 'transition-out',
-
-	    silent: false,
-
-	    horizontal: false,
-	    infinite: false,
-
-	    listenUserMouseWheel: true,
-	    listenUserSwipe: true,
-	    eventElemSelector: null
-	};
-
-	var DEFAULT_CONFIG = {
-	    duration: 1000,
-	    timingFunction: 'ease',
-	    minInterval: 50,
-
-	    translate3d: true,
-
-	    parent: null,
-
-	    respondToUserEvent: true,
-	    stopPropagation: false
-	};
-
-	var DATA_DESCRIPTOR = {
-	    enumerable: false,
-	    configurable: false,
-	    writable: false,
-	    value: {}
-	};
 
 	var DoSlide = function () {
 	    function DoSlide() {
@@ -134,7 +98,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _classCallCheck(this, DoSlide);
 
-	        Object.defineProperty(this, '_data', DATA_DESCRIPTOR);
+	        Object.defineProperty(this, '_data', _config.DATA_DESCRIPTOR);
 	        this.$ = _util2.default;
 	        this.callbacks = {
 	            onChanged: [],
@@ -150,7 +114,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.sections = this.el.children;
 	        this.currentIndex = config.initIndex || 0;
 	        this.currentSection = this.sections[this.currentIndex];
-	        this.config = _extends({}, DEFAULT_CONFIG, DEFAULT_INIT_CONFIG);
+	        this.config = _extends({}, _config.DEFAULT_CONFIG, _config.DEFAULT_INIT_CONFIG);
 	        this.set(config);
 	        (0, _init.init)(this);
 	    }
@@ -285,6 +249,53 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 1 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var DEFAULT_INIT_CONFIG = exports.DEFAULT_INIT_CONFIG = {
+	    initIndex: 0,
+	    initClass: 'ds-init',
+
+	    activeClass: 'active',
+	    transitionInClass: 'transition-in',
+	    transitionOutClass: 'transition-out',
+
+	    silent: false,
+
+	    horizontal: false,
+	    infinite: false,
+
+	    listenUserMouseWheel: true,
+	    listenUserSwipe: true,
+	    eventElemSelector: null
+	};
+
+	var DEFAULT_CONFIG = exports.DEFAULT_CONFIG = {
+	    duration: 1000,
+	    timingFunction: 'ease',
+	    minInterval: 50,
+
+	    translate3d: true,
+
+	    parent: null,
+
+	    respondToUserEvent: true,
+	    stopPropagation: false
+	};
+
+	var DATA_DESCRIPTOR = exports.DATA_DESCRIPTOR = {
+	    enumerable: false,
+	    configurable: false,
+	    writable: false,
+	    value: {}
+	};
+
+/***/ },
+/* 2 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -605,7 +616,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = util;
 
 /***/ },
-/* 2 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -615,13 +626,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.init = undefined;
 
-	var _util = __webpack_require__(1);
+	var _util = __webpack_require__(2);
 
 	var _util2 = _interopRequireDefault(_util);
 
-	var _show = __webpack_require__(3);
+	var _show = __webpack_require__(4);
 
-	var _event = __webpack_require__(4);
+	var _event = __webpack_require__(5);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -640,7 +651,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.init = init;
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -650,11 +661,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.change = exports.initSections = undefined;
 
-	var _util = __webpack_require__(1);
+	var _util = __webpack_require__(2);
 
 	var _util2 = _interopRequireDefault(_util);
 
-	var _event = __webpack_require__(4);
+	var _event = __webpack_require__(5);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -803,7 +814,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.change = change;
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -813,7 +824,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.executeUserEventCallbacks = exports.executeEventCallbacks = exports.startListen = undefined;
 
-	var _util = __webpack_require__(1);
+	var _util = __webpack_require__(2);
 
 	var _util2 = _interopRequireDefault(_util);
 
@@ -902,7 +913,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.executeUserEventCallbacks = executeUserEventCallbacks;
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports) {
 
 	'use strict';
