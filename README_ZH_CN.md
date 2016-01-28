@@ -209,7 +209,7 @@ DoSlide 提供两种对象创建方法：
 
 ## 配置选项
 
-在 DoSlide 的代码中（ [index.js](src/index.js) ），对象的配置是这样子定义的：
+在 DoSlide 的代码中（ [config.js](src/config.js) ），对象的配置是这样子定义的：
 ```js
 const DEFAULT_INIT_CONFIG = {
     initIndex            : 0,
@@ -242,6 +242,7 @@ const DEFAULT_CONFIG = {
     stopPropagation      : false
 }
 ```
+在 [index.js](src/index.js) 中：
 ```js
 // in constructor
 this.config = Object.assign({}, DEFAULT_CONFIG, DEFAULT_INIT_CONFIG)

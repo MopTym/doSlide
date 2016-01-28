@@ -215,7 +215,7 @@ There can be several DoSlide objects in a page, you can use `DoSlide.from()` to 
 
 ## Configuration
 
-In DoSlide's source code ([index.js](src/index.js)) , configurations look like this:
+In DoSlide's source code ([config.js](src/config.js)) , configurations look like this:
 ```js
 const DEFAULT_INIT_CONFIG = {
     initIndex            : 0,
@@ -225,7 +225,7 @@ const DEFAULT_INIT_CONFIG = {
     transitionInClass    : 'transition-in',
     transitionOutClass   : 'transition-out',
 
-    silent               : false,
+    silent               : 0,
 
     horizontal           : false,
     infinite             : false,
@@ -248,6 +248,7 @@ const DEFAULT_CONFIG = {
     stopPropagation      : false
 }
 ```
+In [index.js](src/index.js) :
 ```js
 // in constructor
 this.config = Object.assign({}, DEFAULT_CONFIG, DEFAULT_INIT_CONFIG)
@@ -306,8 +307,8 @@ A more detailed explanation of the configurations follows below:
         </tr>
         <tr>
             <td>silent</td>
-            <td>false</td>
-            <td>If set to <code>true</code>, the actions of DoSlide object will be pure logic with no affect to HTML.</td>
+            <td>0</td>
+            <td><code>0</code>, the actions of DoSlide object will be pure logic with no affect to HTML.</td>
         </tr>
         <tr>
             <td>horizontal</td>
