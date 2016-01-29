@@ -1,5 +1,5 @@
 /*!
- * DoSlide v1.1.1
+ * DoSlide v1.1.3
  * (c) 2016 MopTym <moptym@163.com>
  * Released under the MIT License.
  * Homepage - https://github.com/MopTym/doSlide
@@ -510,13 +510,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } : arguments[2];
 
 	        if (!elem || !callback) return;
-	        ['DOMMouseScroll', 'mousewheel'].map(function (mouseWheel) {
+	        var lastTime = 0,
+	            scrollings = [];['DOMMouseScroll', 'mousewheel'].map(function (mouseWheel) {
 	            elem.addEventListener(mouseWheel, function (event) {
 	                event.preventDefault();
 	                if (isStopPropFn()) event.stopPropagation();
-	                var delta = event.detail ? event.detail * -120 : event.wheelDelta;
-	                var direction = delta < 0 ? 'down' : 'up';
-	                callback.call(elem, direction);
+	                var delta = event.detail ? -event.detail : event.wheelDelta;
+	                if (delta) {
+	                    if (Date.now() - lastTime > 200) {
+	                        scrollings = [];
+	                    }
+	                    lastTime = Date.now();
+	                    scrollings.push(Math.abs(delta));
+	                    if (scrollings.length > 150) {
+	                        scrollings.shift();
+	                    }
+	                    var avgEnd = ~ ~getAvarage(scrollings.slice(-10));
+	                    var avgMiddle = ~ ~getAvarage(scrollings.slice(-70));
+	                    var isAccelerating = avgEnd >= avgMiddle;
+	                    if (isAccelerating) {
+	                        var direction = delta < 0 ? 'down' : 'up';
+	                        callback.call(elem, direction);
+	                    }
+	                }
 	            }, false);
 	        });
 	    },
@@ -574,6 +590,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    keys: keys
 
 	});
+
+	function getAvarage(array) {
+	    if (!array.length) return 0;
+	    var sum = Array.prototype.reduce.call(array, function (last, item) {
+	        return last + item;
+	    });
+	    return sum / array.length;
+	}
 
 	function isArrayLike(tar) {
 	    return (typeof tar === 'undefined' ? 'undefined' : _typeof(tar)) === 'object' && isSet(tar.length);

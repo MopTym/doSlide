@@ -4,7 +4,6 @@ module.exports = {
         path: './test',
         filename: 'test.js'
     },
-    cache: true,
     module: {
         loaders: [
             {
