@@ -190,13 +190,29 @@ Object.assign(util, {
 
     onMouseWheel(elem, callback, isStopPropFn = () => false) {
         if (!elem || !callback) return
-        ['DOMMouseScroll', 'mousewheel'].map((mouseWheel) => {
+        let lastTime = 0, scrollings = []
+        ;['DOMMouseScroll', 'mousewheel'].map((mouseWheel) => {
             elem.addEventListener(mouseWheel, (event) => {
                 event.preventDefault()
                 if (isStopPropFn()) event.stopPropagation()
-                let delta = event.detail? event.detail * (-120) : event.wheelDelta
-                let direction = delta < 0? 'down': 'up'
-                callback.call(elem, direction)
+                let delta = event.detail? -event.detail: event.wheelDelta
+                if (delta) {
+                    if (Date.now() - lastTime > 200) {
+                        scrollings = []
+                    }
+                    lastTime = Date.now()
+                    scrollings.push(Math.abs(delta))
+                    if(scrollings.length > 150){
+                        scrollings.shift()
+                    }
+                    let avgEnd = ~~getAvarage(scrollings.slice(-10))
+                    let avgMiddle = ~~getAvarage(scrollings.slice(-70))
+                    let isAccelerating = avgEnd >= avgMiddle;
+                    if (isAccelerating) {
+                        let direction = delta < 0? 'down': 'up'
+                        callback.call(elem, direction)
+                    }
+                }
             }, false)
         })
     },
@@ -245,6 +261,12 @@ Object.assign(util, {
     keys
 
 })
+
+function getAvarage(array) {
+    if (!array.length) return 0
+    let sum = Array.prototype.reduce.call(array, (last, item) => last + item)
+    return sum / array.length
+}
 
 function isArrayLike(tar) {
     return typeof tar === 'object' && isSet(tar.length)
