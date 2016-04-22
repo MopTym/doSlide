@@ -1,5 +1,5 @@
 /*!
- * DoSlide v1.1.3
+ * DoSlide v1.1.4
  * (c) 2016 MopTym <moptym@163.com>
  * Released under the MIT License.
  * Homepage - https://github.com/MopTym/doSlide
@@ -152,7 +152,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'go',
 	        value: function go(index) {
-	            (0, _show.change)(this, index);
+	            (0, _show.change)(this, +index || 0);
 	            return this;
 	        }
 	    }, {

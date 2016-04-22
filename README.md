@@ -225,7 +225,7 @@ const DEFAULT_INIT_CONFIG = {
     transitionInClass    : 'transition-in',
     transitionOutClass   : 'transition-out',
 
-    silent               : 0,
+    silent               : false,
 
     horizontal           : false,
     infinite             : false,
@@ -307,8 +307,8 @@ A more detailed explanation of the configurations follows below:
         </tr>
         <tr>
             <td>silent</td>
-            <td>0</td>
-            <td><code>0</code>, the actions of DoSlide object will be pure logic with no affect to HTML.</td>
+            <td>false</td>
+            <td>The actions of DoSlide object will be pure logic with no affect to HTML.</td>
         </tr>
         <tr>
             <td>horizontal</td>
