@@ -68,7 +68,7 @@ class DoSlide {
     }
 
     go(index) {
-        change(this, index)
+        change(this, +index || 0)
         return this
     }
 
