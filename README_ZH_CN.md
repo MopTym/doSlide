@@ -320,7 +320,7 @@ slide.set({
             <td>是否监听用户鼠标滚轮事件</td>
         </tr>
         <tr>
-            <td>listenUserSlide</td>
+            <td>listenUserSwipe</td>
             <td>true</td>
             <td>是否监听用户触屏滑动事件</td>
         </tr>

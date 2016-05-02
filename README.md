@@ -326,9 +326,9 @@ A more detailed explanation of the configurations follows below:
             <td>Defines whether to listen user mouse wheel event or not.</td>
         </tr>
         <tr>
-            <td>listenUserSlide</td>
+            <td>listenUserSwipe</td>
             <td>true</td>
-            <td>Defines whether to listen user touch slide event or not.</td>
+            <td>Defines whether to listen user swipe event or not.</td>
         </tr>
         <tr>
             <td>eventElemSelector</td>
